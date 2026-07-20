@@ -1,0 +1,32 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/fundamental-research-labs-openapi-original.json
+docs: https://shortcut.ai/docs/platform-api
+notes: 'External callers authenticate with an API key sent as a Bearer token (`Authorization:
+  Bearer [example key]`), created from Settings -> API Keys in Shortcut. First-party Shortcut
+  applications may instead pass the user session/access token as a Bearer token
+  (shortcutSession) or, for trusted Shortcut web origins, via the `shortcut_access_token`
+  cookie (shortcutCookie). `/verify` and webhooks require API-key auth. No OAuth2 or
+  OpenID Connect flows are offered.'
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - cookie
+schemes:
+- name: apiKey
+  type: http
+  scheme: bearer
+  bearerFormat: API Key
+  description: 'API key in Bearer token format: `Authorization: Bearer [example key]`'
+  sources:
+  - openapi/fundamental-research-labs-openapi-original.json
+- name: shortcutCookie
+  type: apiKey
+  in: cookie
+  parameter: shortcut_access_token
+  description: Shortcut web session cookie for credentialed fetch requests. Missing or untrusted
+    Origin headers are rejected.
+  sources:
+  - openapi/fundamental-research-labs-openapi-original.json
