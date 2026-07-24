@@ -1,0 +1,170 @@
+openapi: 3.0.3
+info:
+  title: Shortcut Authentication Usage API
+  version: 1.0.0
+  description: 'Shortcut API lets teams automate spreadsheet workflows and export organization usage data programmatically.
+
+
+    ## Getting Started
+
+
+    ### Create an API key
+
+
+    1. Go to [shortcut.ai](https://shortcut.ai)
+
+    2. Navigate to **Settings → API Keys**
+
+    3. Create a new API key
+
+
+    External callers use an API key in the `Authorization` header as a Bearer token:
+
+    `Authorization: Bearer sc-xxx`
+
+
+    Authenticated Shortcut applications can call spreadsheet automation routes with
+
+    the user''s Shortcut session or access token for run, upload, status, download,
+
+    skills, and cancel operations. Non-browser applications send the JWT as a
+
+    bearer token; Shortcut web applications may use the same JWT through the
+
+    `shortcut_access_token` cookie in a credentialed request from a trusted
+
+    Shortcut origin. `/verify` and webhooks require API key authentication because
+
+    they depend on API key and webhook-secret state.
+
+
+    ### Spreadsheet automation workflow
+
+
+    1. **Verify your API key**: `GET /api/spreadsheets/verify`
+
+    2. **Submit a job**: `POST /api/spreadsheets` with a prompt
+
+    3. **Check status**: `GET /api/spreadsheets/:runId` (poll until completed, failed, or error)
+
+    4. **Download result**: `GET /api/spreadsheets/:runId/download`
+
+
+    ### Usage export workflow
+
+
+    1. Open **Usage Metrics** in Shortcut.
+
+    2. Copy the prefilled command from **Programmatic export**.
+
+    3. Use the Usage API reference to customize date range, format, or grouping.
+
+
+    ### Spreadsheet automation limits
+
+
+    - Maximum 2000 concurrent jobs per API key
+
+    - Job timeout: 30 minutes (configurable up to 120 minutes)
+
+    '
+tags:
+- name: Usage
+  description: Export team usage metrics for reporting, finance, and internal analytics. Usage Metrics in Shortcut provides a prefilled request with your team_id; use this reference to customize date range, format, or grouping.
+paths:
+  /api/v1/team/usage-export:
+    get:
+      summary: Export team usage metrics
+      tags:
+      - Usage
+      description: Export team usage metrics as JSON or CSV. Usage Metrics in Shortcut provides a prefilled request with your team_id; use these query parameters to customize the date range, output format, and optional platform grouping. API keys must belong to a user with usage metrics access for the requested team or organization.
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: team_id
+        required: false
+        description: Team or organization ID to export. Required for API-key integrations. Usage Metrics shows a prefilled request for the current organization.
+      - schema:
+          type: string
+          enum:
+          - day
+          - week
+          - month
+          - 60days
+          - 90days
+          - all
+          default: month
+        in: query
+        name: period
+        required: false
+        description: Relative date range to export when start_date and end_date are omitted.
+      - schema:
+          type: string
+        in: query
+        name: start_date
+        required: false
+        description: YYYY-MM-DD. Must be provided together with end_date; takes precedence over period.
+      - schema:
+          type: string
+        in: query
+        name: end_date
+        required: false
+        description: YYYY-MM-DD. Must be provided together with start_date; takes precedence over period.
+      - schema:
+          type: string
+          default: UTC
+        in: query
+        name: timezone
+        required: false
+        description: IANA timezone used to resolve relative periods and day boundaries.
+      - schema:
+          type: string
+          enum:
+          - json
+          - csv
+          default: json
+        in: query
+        name: format
+        required: false
+        description: Response format.
+      - schema:
+          type: string
+          enum:
+          - summary
+          - daily
+          default: summary
+        in: query
+        name: report
+        required: false
+        description: CSV only. summary exports per-member totals; daily exports member usage by day.
+      - schema:
+          type: string
+          enum:
+          - platform
+        in: query
+        name: group_by
+        required: false
+        description: JSON only. Add platform usage breakdowns to the response.
+      security:
+      - apiKey: []
+      responses:
+        '200':
+          description: Default Response
+components:
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: API Key
+      description: 'API key in Bearer token format: `Authorization: Bearer sc-xxx`'
+    shortcutSession:
+      type: http
+      scheme: bearer
+      bearerFormat: Shortcut Session
+      description: First-party Shortcut application session or access token sent as an explicit Bearer token.
+    shortcutCookie:
+      type: apiKey
+      in: cookie
+      name: shortcut_access_token
+      description: Shortcut web session cookie for credentialed fetch requests. Missing or untrusted Origin headers are rejected.

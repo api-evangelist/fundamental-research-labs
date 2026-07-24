@@ -1,0 +1,164 @@
+openapi: 3.0.3
+info:
+  title: Shortcut Authentication API
+  version: 1.0.0
+  description: 'Shortcut API lets teams automate spreadsheet workflows and export organization usage data programmatically.
+
+
+    ## Getting Started
+
+
+    ### Create an API key
+
+
+    1. Go to [shortcut.ai](https://shortcut.ai)
+
+    2. Navigate to **Settings → API Keys**
+
+    3. Create a new API key
+
+
+    External callers use an API key in the `Authorization` header as a Bearer token:
+
+    `Authorization: Bearer sc-xxx`
+
+
+    Authenticated Shortcut applications can call spreadsheet automation routes with
+
+    the user''s Shortcut session or access token for run, upload, status, download,
+
+    skills, and cancel operations. Non-browser applications send the JWT as a
+
+    bearer token; Shortcut web applications may use the same JWT through the
+
+    `shortcut_access_token` cookie in a credentialed request from a trusted
+
+    Shortcut origin. `/verify` and webhooks require API key authentication because
+
+    they depend on API key and webhook-secret state.
+
+
+    ### Spreadsheet automation workflow
+
+
+    1. **Verify your API key**: `GET /api/spreadsheets/verify`
+
+    2. **Submit a job**: `POST /api/spreadsheets` with a prompt
+
+    3. **Check status**: `GET /api/spreadsheets/:runId` (poll until completed, failed, or error)
+
+    4. **Download result**: `GET /api/spreadsheets/:runId/download`
+
+
+    ### Usage export workflow
+
+
+    1. Open **Usage Metrics** in Shortcut.
+
+    2. Copy the prefilled command from **Programmatic export**.
+
+    3. Use the Usage API reference to customize date range, format, or grouping.
+
+
+    ### Spreadsheet automation limits
+
+
+    - Maximum 2000 concurrent jobs per API key
+
+    - Job timeout: 30 minutes (configurable up to 120 minutes)
+
+    '
+tags:
+- name: Authentication
+  description: API key authentication and verification
+paths:
+  /api/spreadsheets/verify:
+    get:
+      summary: Verify API Key
+      tags:
+      - Authentication
+      description: Verifies that your API key is valid and returns information about the authenticated user
+      security:
+      - apiKey: []
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Request success status
+                    enum:
+                    - true
+                  message:
+                    type: string
+                    description: Success message
+                  webhookSecret:
+                    type: string
+                    description: Per-API-key HMAC-SHA256 secret for verifying webhook signatures. Use this to validate the X-Shortcut-Signature header on incoming webhook requests.
+                required:
+                - success
+                - message
+                - webhookSecret
+                additionalProperties: false
+        '401':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Request success status
+                    enum:
+                    - false
+                  error:
+                    type: string
+                    description: Error type
+                  message:
+                    type: string
+                    description: Error message
+                required:
+                - success
+                - error
+                additionalProperties: false
+        '500':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Request success status
+                    enum:
+                    - false
+                  error:
+                    type: string
+                    description: Error type
+                required:
+                - success
+                - error
+                additionalProperties: false
+components:
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: API Key
+      description: 'API key in Bearer token format: `Authorization: Bearer sc-xxx`'
+    shortcutSession:
+      type: http
+      scheme: bearer
+      bearerFormat: Shortcut Session
+      description: First-party Shortcut application session or access token sent as an explicit Bearer token.
+    shortcutCookie:
+      type: apiKey
+      in: cookie
+      name: shortcut_access_token
+      description: Shortcut web session cookie for credentialed fetch requests. Missing or untrusted Origin headers are rejected.
