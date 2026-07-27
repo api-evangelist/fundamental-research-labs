@@ -1,0 +1,16 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/fundamental-research-labs-openapi-original.json + https://shortcut.ai/docs/platform-api
+type: Webhooks
+notes: 'Shortcut documents job-completion webhooks but does not publish an AsyncAPI
+  document. This captures the webhook surface. Not fabricating an AsyncAPI spec.'
+webhooks:
+- name: job.completed
+  trigger: 'A spreadsheet run finishes (completed or failed).'
+  subscription: 'Provide webhookUrl when submitting a job (POST /api/spreadsheets).'
+  delivery: 'HTTP POST callback to the supplied webhookUrl.'
+  signature:
+    header: 'X-Shortcut-Signature: sha256=<hmac-sha256>'
+    algorithm: HMAC-SHA256
+    secret_source: 'GET /api/spreadsheets/verify returns webhookSecret (per-API-key secret)'
+    verification: 'Recompute the HMAC-SHA256 of the raw request body with the webhook secret and compare to the X-Shortcut-Signature header.'

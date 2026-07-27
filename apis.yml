@@ -1,22 +1,97 @@
 aid: fundamental-research-labs
 name: Fundamental Research Labs
-description: 'Fundamental Research Labs is a company surfaced as a portfolio company of prosus-ventures
-  and added to the API Evangelist network as a stub for enrichment. Sector: ai. This profile is a lead
-  awaiting the enrichment pipeline.'
+description: 'Fundamental Research Labs (formerly Altera) is an applied AI research
+  company building autonomous, collaborative AI agents, founded by researchers from
+  MIT EECS, the Stanford NLP Group, Google X, and Citadel and backed by Andreessen
+  Horowitz and Prosus. Its flagship product, Shortcut, is an AI analyst for Excel
+  that turns natural-language prompts into full spreadsheet models — LBOs, DCFs,
+  three-statement models, waterfalls — and ships a web app, desktop app, Excel and
+  Google Sheets plugins, a ShortcutXL terminal agent (CLI), and a Platform API. The
+  Shortcut Platform API lets teams submit spreadsheet-automation jobs, poll status,
+  download generated workbooks, upload context files, list agent skills, and export
+  organization usage data programmatically using API-key bearer authentication.'
 url: https://raw.githubusercontent.com/api-evangelist/fundamental-research-labs/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - prosus-ventures
-x-tier: stub
-x-tier-reason: portfolio-lead
+- andreessen-horowitz
+x-tier: enriched
+x-tier-reason: has-public-api
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
+image: https://shortcut.ai/og-image.png
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
 - Ai
-apis: []
+- Artificial Intelligence
+- Spreadsheets
+- Excel
+- Financial Modeling
+- Agents
+- Automation
+- Productivity
+- Data Analysis
+apis:
+- aid: fundamental-research-labs:fundamental-research-labs-authentication-api
+  name: Fundamental Research Labs Authentication API
+  description: API key authentication and verification
+  humanURL: https://shortcut.ai/docs/platform-api
+  baseURL: https://api.shortcut.ai
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/fundamental-research-labs-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://shortcut.ai/docs/platform-api
+  - type: InteractiveDocumentation
+    url: https://api.shortcut.ai/api/spreadsheets/docs
+- aid: fundamental-research-labs:fundamental-research-labs-spreadsheets-api
+  name: Fundamental Research Labs Spreadsheets API
+  description: Spreadsheet processing and automation endpoints
+  humanURL: https://shortcut.ai/docs/platform-api
+  baseURL: https://api.shortcut.ai
+  tags:
+  - Spreadsheets
+  properties:
+  - type: OpenAPI
+    url: openapi/fundamental-research-labs-spreadsheets-api-openapi.yml
+  - type: Documentation
+    url: https://shortcut.ai/docs/platform-api
+  - type: InteractiveDocumentation
+    url: https://api.shortcut.ai/api/spreadsheets/docs
+- aid: fundamental-research-labs:fundamental-research-labs-usage-api
+  name: Fundamental Research Labs Usage API
+  description: >-
+    Export team usage metrics for reporting, finance, and internal analytics. Usage Metrics in Shortcut
+    provides a prefilled request with your team_id; use this reference to customize date range, format,
+    or grouping.
+  humanURL: https://shortcut.ai/docs/platform-api
+  baseURL: https://api.shortcut.ai
+  tags:
+  - Usage
+  properties:
+  - type: OpenAPI
+    url: openapi/fundamental-research-labs-usage-api-openapi.yml
+  - type: Documentation
+    url: https://shortcut.ai/docs/platform-api
+  - type: InteractiveDocumentation
+    url: https://api.shortcut.ai/api/spreadsheets/docs
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -25,3 +100,70 @@ maintainers:
 common:
 - type: Website
   url: https://fundamentalresearchlabs.ai
+- type: DeveloperPortal
+  url: https://shortcut.ai/docs
+- type: Documentation
+  url: https://shortcut.ai/docs
+- type: APIReference
+  url: https://shortcut.ai/docs/platform-api
+- type: GettingStarted
+  url: https://shortcut.ai/docs/platform-api
+- type: Pricing
+  url: https://shortcut.ai/pricing
+- type: SignUp
+  url: https://shortcut.ai/shortcut
+- type: Blog
+  url: https://shortcut.ai/blog
+- type: Support
+  url: https://shortcut.ai/support
+- type: PrivacyPolicy
+  url: https://shortcut.ai/privacy/policy
+- type: TermsOfService
+  url: https://shortcut.ai/terms
+- type: GitHubOrganization
+  url: https://github.com/fundamental-research-labs
+- type: Compliance
+  url: https://shortcut.ai/pricing
+- type: OpenAPI
+  url: openapi/fundamental-research-labs-openapi-original.json
+- type: Authentication
+  url: authentication/fundamental-research-labs-authentication.yml
+- type: Packages
+  url: packages/fundamental-research-labs-packages.yml
+- type: CLI
+  url: cli/fundamental-research-labs-cli.yml
+- type: MCPServer
+  url: mcp/fundamental-research-labs-mcp.yml
+- type: LLMsTxt
+  url: llms/fundamental-research-labs-llms.txt
+- type: Overlay
+  url: overlays/fundamental-research-labs-shortcut-overlay.yaml
+- type: Conformance
+  url: conformance/fundamental-research-labs-conformance.yml
+- type: ErrorCatalog
+  url: errors/fundamental-research-labs-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/fundamental-research-labs-lifecycle.yml
+- type: Conventions
+  url: conventions/fundamental-research-labs-conventions.yml
+- type: DataModel
+  url: data-model/fundamental-research-labs-data-model.yml
+- type: Webhooks
+  url: asyncapi/fundamental-research-labs-webhooks.yml
+- type: ChangeLog
+  url: changelog/fundamental-research-labs-changelog.yml
+- type: RateLimits
+  url: rate-limits/fundamental-research-labs-rate-limits.yml
+- type: Plans
+  url: plans/fundamental-research-labs-plans.yml
+- type: AgenticAccess
+  url: agentic-access/fundamental-research-labs-agentic-access.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/fundamental-research-labs-domain-security.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

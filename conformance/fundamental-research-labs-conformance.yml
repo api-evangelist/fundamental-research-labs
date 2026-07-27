@@ -1,0 +1,33 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/fundamental-research-labs-openapi-original.json + https://shortcut.ai/pricing
+standards:
+- id: rest-json
+  conforms: true
+  evidence: JSON request/response REST API over HTTPS.
+- id: bearer-token-auth
+  conforms: true
+  evidence: securitySchemes apiKey/shortcutSession use http bearer tokens (sc-xxx).
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securityScheme; API-key bearer auth only.
+- id: openid-connect
+  conforms: false
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use a custom {success:false, error, message} JSON envelope, not application/problem+json.
+- id: webhook-hmac-signing
+  conforms: true
+  evidence: Job-completion webhooks signed with X-Shortcut-Signature; sha256=<hmac-sha256> using the per-API-key webhook secret from /verify.
+- id: pagination-offset-limit
+  conforms: true
+  evidence: List Spreadsheet Runs supports limit (1-100, default 50) and offset query parameters.
+compliance:
+  program_published: true
+  source: https://shortcut.ai/pricing
+  certifications:
+  - SOC 2 Type II
+  - EU GDPR
+  - CCPA
+  notes: 'Shortcut states "SOC 2 Type II Certified", "EU GDPR Compliant", and "CCPA
+    Ready", plus "No AI Training on Your Data" and SSO/MFA controls on team/enterprise plans.'

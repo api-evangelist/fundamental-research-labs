@@ -1,0 +1,29 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/fundamental-research-labs-openapi-original.json
+notes: 'Generated Agent Skills grounded in real Shortcut Platform API operations.
+  The published spec has no operationIds, so operations are referenced by
+  method + path (verbatim from the spec). No provider-published skill/AGENTS.md
+  file was found to save verbatim.'
+skills:
+- file: fundamental-research-labs-generate-spreadsheet.md
+  name: Generate a spreadsheet from a prompt
+  api: openapi/fundamental-research-labs-openapi-original.json
+  operations:
+  - 'GET /api/spreadsheets/verify'
+  - 'POST /api/spreadsheets'
+  - 'GET /api/spreadsheets/{runId}'
+  - 'GET /api/spreadsheets/{runId}/download'
+- file: fundamental-research-labs-upload-and-analyze.md
+  name: Upload files and run an analysis with skills
+  api: openapi/fundamental-research-labs-openapi-original.json
+  operations:
+  - 'POST /api/spreadsheets/upload'
+  - 'GET /api/spreadsheets/skills'
+  - 'POST /api/spreadsheets'
+  - 'GET /api/spreadsheets/{runId}'
+- file: fundamental-research-labs-export-team-usage.md
+  name: Export team usage metrics
+  api: openapi/fundamental-research-labs-openapi-original.json
+  operations:
+  - 'GET /api/v1/team/usage-export'

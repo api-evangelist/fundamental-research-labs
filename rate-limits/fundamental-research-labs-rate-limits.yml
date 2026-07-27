@@ -1,0 +1,34 @@
+generated: '2026-07-19'
+method: searched
+source: https://shortcut.ai/docs/platform-api + openapi/fundamental-research-labs-openapi-original.json
+scope: api_key
+limits:
+- name: requests_per_minute
+  limit_count: 500
+  window: minute
+  scope: api_key
+  source: https://shortcut.ai/docs/platform-api
+- name: concurrent_jobs
+  limit_count: 2000
+  window: concurrent
+  scope: api_key
+  source: 'openapi info.description ("Maximum 2000 concurrent jobs per API key")'
+  notes: 'The docs quick-reference panel shows a lower per-tier figure (5 concurrent jobs); the OpenAPI states a maximum of 2000 concurrent jobs per API key.'
+- name: max_file_size_mb
+  limit_count: 100
+  window: per-file
+  scope: upload
+  source: https://shortcut.ai/docs/platform-api
+- name: max_context_files
+  limit_count: 5
+  window: per-job
+  scope: request
+  source: 'openapi contextFiles maxItems'
+- name: job_timeout_seconds
+  limit_count: 7200
+  window: per-job
+  scope: request
+  source: 'openapi (default 1800s, configurable up to 7200s)'
+signaling:
+  status: 429
+  error: errors/fundamental-research-labs-problem-types.yml

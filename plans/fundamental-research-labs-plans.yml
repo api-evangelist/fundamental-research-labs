@@ -1,0 +1,45 @@
+generated: '2026-07-19'
+method: searched
+source: https://shortcut.ai/pricing
+currency: USD
+notes: 'Credit usage varies by message complexity — typically 2-15 credits per message.
+  Prices reflect annual billing as displayed on the pricing page.'
+plans:
+- name: Free
+  price: 0
+  period: month
+  credits: 20
+  features:
+  - Web, desktop app, Excel plugin, and Google Sheets plugin
+  - 20 free credits
+- name: Pro
+  price: 100
+  period: month
+  billing: annual
+  credits: 1000
+  features:
+  - 1,000 monthly credits (plus 20 free credits)
+  - Unlimited file creation and edits
+  - Platform API access
+- name: Teams
+  price: 320
+  per_seat: 100
+  period: month
+  billing: annual
+  credits: 1000
+  features:
+  - 1,000 monthly team credits
+  - SSO and MFA
+  - Enterprise-grade security
+  - Group-based access control
+  - Usage stats and analytics
+  - Shared resources
+- name: Enterprise
+  price: null
+  period: custom
+  features:
+  - Everything in Teams
+  - Dedicated support
+  - Custom integrations and SLA
+  - Custom payment options
+  - Optional unlimited seats or credits

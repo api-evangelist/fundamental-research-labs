@@ -1,0 +1,22 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.npmjs.com/package/shortcutxl + https://shortcut.ai/blog/posts/shortcutxl-cli
+name: ShortcutXL
+summary: 'ShortcutXL is Shortcut''s terminal-first AI agent — an Excel-capable agent
+  that runs locally in the terminal (Node.js based), announced in the "Introducing
+  ShortcutXL" and "ShortcutXL CLI" posts. The CLI complements the web app, desktop
+  app, and Excel/Google Sheets plugins.'
+install:
+- method: npm
+  command: npm install -g shortcutxl
+- method: npx
+  command: npx shortcutxl
+- method: homebrew
+  command: brew install fundamental-research-labs/tap/sfae
+binary: packages/fundamental-research-labs-packages.yml
+docs: https://shortcut.ai/docs
+blog:
+- https://shortcut.ai/blog/posts/introducing-shortcutxl
+- https://shortcut.ai/blog/posts/shortcutxl-cli
+notes: 'Command/flag surface is not published in a machine-readable reference; captured
+  install methods and provenance only rather than fabricate a command tree.'

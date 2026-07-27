@@ -1,0 +1,68 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/fundamental-research-labs-openapi-original.json
+format: custom-envelope
+envelope:
+  shape: '{ "success": false, "error": "<error type>", "message": "<human-readable message>" }'
+  notes: 'Error responses are a JSON object with success:false plus error and message
+    fields (not RFC 9457 application/problem+json). Cancel/status errors may also
+    include a status field.'
+problems:
+- status: 400
+  title: Bad Request
+  meaning: Invalid request body or parameters (e.g. malformed prompt/file references).
+  source_operations:
+  - 'POST /api/spreadsheets'
+  - 'POST /api/spreadsheets/upload'
+- status: 401
+  title: Unauthorized
+  meaning: Missing or invalid API key / session token.
+  source_operations:
+  - 'POST /api/spreadsheets'
+  - 'GET /api/spreadsheets'
+  - 'GET /api/spreadsheets/verify'
+  - 'GET /api/spreadsheets/skills'
+- status: 402
+  title: Payment Required
+  meaning: Insufficient credits to run the requested job.
+  remediation: Top up credits or upgrade the plan; credit usage is typically 2-15 per message.
+  source_operations:
+  - 'POST /api/spreadsheets'
+- status: 403
+  title: Forbidden
+  meaning: Authenticated caller is not authorized for this run/team resource.
+  source_operations:
+  - 'GET /api/spreadsheets/{runId}'
+  - 'POST /api/spreadsheets/{runId}/cancel'
+  - 'GET /api/spreadsheets/{runId}/download'
+- status: 404
+  title: Not Found
+  meaning: Run, artifact, or resource does not exist.
+  source_operations:
+  - 'GET /api/spreadsheets/{runId}'
+  - 'GET /api/spreadsheets/{runId}/artifacts/{filename}'
+- status: 409
+  title: Conflict
+  meaning: Run is in a state that conflicts with the request (e.g. cannot cancel/download).
+  source_operations:
+  - 'POST /api/spreadsheets/{runId}/cancel'
+  - 'GET /api/spreadsheets/{runId}/download'
+- status: 413
+  title: Payload Too Large
+  meaning: Uploaded file exceeds the size limit (100MB per file).
+  source_operations:
+  - 'POST /api/spreadsheets/upload'
+- status: 429
+  title: Too Many Requests
+  meaning: Rate limit exceeded (500 requests/min per API key).
+  remediation: Back off and retry; respect the per-API-key request rate.
+  source_operations:
+  - 'POST /api/spreadsheets'
+- status: 500
+  title: Internal Server Error
+  meaning: Unexpected server-side failure.
+- status: 503
+  title: Service Unavailable
+  meaning: Skills service (or dependency) temporarily unavailable.
+  source_operations:
+  - 'GET /api/spreadsheets/skills'

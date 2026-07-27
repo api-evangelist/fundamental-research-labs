@@ -1,0 +1,24 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.npmjs.com/package/shortcutxl + https://github.com/fundamental-research-labs
+notes: 'ShortcutXL is Shortcut''s terminal agent (CLI), published to npm as `shortcutxl`
+  and also available via the org Homebrew tap. No dedicated client SDK library
+  (Python/JS/Go/etc.) for the Platform API was published at time of enrichment —
+  callers use the REST API directly with an API key.'
+packages:
+- language: javascript
+  registry: npm
+  name: shortcutxl
+  url: https://www.npmjs.com/package/shortcutxl
+  install: npm install -g shortcutxl
+  version: 0.3.73
+  description: 'ShortcutXL — an AI agent that lives on your computer with Excel superpowers.
+    Made by the Shortcut team.'
+  official: true
+- language: shell
+  registry: homebrew
+  name: sfae
+  url: https://github.com/fundamental-research-labs/homebrew-tap
+  install: brew install fundamental-research-labs/tap/sfae
+  description: Binary distributed via the official Fundamental Research Labs Homebrew tap.
+  official: true

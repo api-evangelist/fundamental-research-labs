@@ -1,0 +1,54 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/fundamental-research-labs-openapi-original.json
+notes: 'Derived from the Shortcut Platform OpenAPI. The published spec inlines schemas
+  (empty components.schemas), so entities and relationships are inferred from request
+  bodies, path parameters, and response fields rather than $ref links.'
+entities:
+- name: Run
+  id_field: runId
+  description: A spreadsheet-automation job. Created by submitting a prompt; progresses queued -> running -> finalizing -> completed | failed | cancelled.
+  fields: [runId, status, prompt, createdAt, completedAt, creditsUsed, summary, downloadUrl, artifacts]
+- name: File
+  id_field: fileId
+  id_format: uuid
+  description: An uploaded Excel/context file referenced by a run (initFile or contextFiles).
+- name: Artifact
+  id_field: filename
+  description: A file produced by a run, downloaded via the run artifacts endpoint.
+- name: Skill
+  id_field: id
+  id_format: 'source-qualified (default:/personal:/team:{teamId}:)'
+  description: A reusable agent skill applied to a job.
+- name: Project
+  id_field: projectId
+  id_format: uuid
+  description: A project whose source files mount read-only at /project for a run.
+- name: TeamUsage
+  id_field: team_id
+  description: Aggregated team/organization usage metrics exported as JSON or CSV.
+relationships:
+- from: Run
+  to: File
+  type: has_many
+  via: contextFiles
+- from: Run
+  to: File
+  type: has_one
+  via: initFile
+- from: Run
+  to: Skill
+  type: has_many
+  via: skills
+- from: Run
+  to: Project
+  type: belongs_to
+  via: projectId
+- from: Run
+  to: Artifact
+  type: has_many
+  via: artifacts
+- from: TeamUsage
+  to: Run
+  type: has_many
+  via: team_id

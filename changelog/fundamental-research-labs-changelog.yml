@@ -1,0 +1,53 @@
+generated: '2026-07-19'
+method: searched
+source: https://shortcut.ai/changelog
+scheme: semver
+current_version: 1.0.1
+notes: 'Product changelog for Shortcut (app + Platform API). Recent window captured;
+  the live changelog is the source of truth.'
+entries:
+- version: 1.0.1
+  date: '2026-07-18'
+  highlights:
+  - Type @ to autocomplete Excel sheet names
+  - Follow-up suggestions appear reliably again
+  - Billing fixes
+- version: 1.0.0
+  date: '2026-07-09'
+  highlights:
+  - Organization-wide default model settings for admins
+  - Gemini API key integration
+  - Personal plans no longer expire prematurely
+- version: 0.9.10
+  date: '2026-07-09'
+  highlights:
+  - Introduced GPT-5.6 Sol model as primary offering
+  - Model picker shows clearer ratings
+- version: 0.9.9
+  date: '2026-07-08'
+  highlights:
+  - Fast mode for quicker agent responses
+  - Templates open faster by skipping the workbook probe step
+- version: 0.9.8
+  date: '2026-07-07'
+  highlights:
+  - Session protection when navigating away
+  - Reliable template loading
+  - New self-serve usage export API with documentation
+- version: 0.9.7
+  date: '2026-06-25'
+  highlights:
+  - Clearer billing messaging when credits run low
+  - Web search costs billed consistently through credits
+- version: 0.9.6
+  date: '2026-06-22'
+  highlights:
+  - High-performance calculation engine for web spreadsheets
+  - Large spreadsheets open and recalculate more quickly
+- version: 0.9.5
+  date: '2026-06-18'
+  highlights:
+  - Expanded Workspaces with global/workbook toggle
+  - Project-level context
+  - Faster web search for data enrichment
+  - Scheduled agent Loops

@@ -1,0 +1,44 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/fundamental-research-labs-openapi-original.json + https://shortcut.ai/docs/platform-api
+authentication:
+  style: bearer-api-key
+  header: 'Authorization: Bearer sc-xxx'
+  alternatives: [shortcut session bearer token, shortcut_access_token cookie]
+  ref: authentication/fundamental-research-labs-authentication.yml
+idempotency:
+  supported: false
+  notes: 'The Platform API does not document an idempotency key. Job submission
+    (POST /api/spreadsheets) is not idempotent; deduplicate on the client if needed.'
+pagination:
+  style: offset-limit
+  params:
+    limit: 'integer 1-100 (default 50)'
+    offset: 'integer >=0 (default 0)'
+  response_fields: [runs, limit, offset]
+  applies_to: 'GET /api/spreadsheets'
+async_jobs:
+  model: submit-poll-download
+  submit: 'POST /api/spreadsheets -> { runId, status: queued|running }'
+  poll: 'GET /api/spreadsheets/{runId} -> status queued|running|finalizing|completed|failed|cancelled'
+  download: 'GET /api/spreadsheets/{runId}/download (or downloadUrl on completed status)'
+  cancel: 'POST /api/spreadsheets/{runId}/cancel'
+  modes: [action, ask]
+  timeout: 'default 1800s, configurable up to 7200s'
+request_tracing:
+  identifier: runId
+  notes: 'Each job is tracked by a server-issued runId returned on submit.'
+webhooks:
+  supported: true
+  param: webhookUrl (on job submission)
+  signature_header: 'X-Shortcut-Signature: sha256=<hmac-sha256>'
+  secret_source: 'GET /api/spreadsheets/verify returns webhookSecret (per-API-key HMAC-SHA256)'
+  ref: asyncapi/fundamental-research-labs-webhooks.yml
+versioning:
+  ref: lifecycle/fundamental-research-labs-lifecycle.yml
+error_envelope:
+  shape: '{ success: false, error, message }'
+  ref: errors/fundamental-research-labs-problem-types.yml
+rate_limit_signaling:
+  status: 429
+  ref: rate-limits/fundamental-research-labs-rate-limits.yml

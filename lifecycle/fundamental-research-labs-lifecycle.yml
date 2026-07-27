@@ -1,0 +1,23 @@
+generated: '2026-07-19'
+method: searched
+source: https://shortcut.ai/changelog + openapi/fundamental-research-labs-openapi-original.json
+versioning:
+  scheme: uri-path
+  current: v1
+  spec_version: 1.0.0
+  docs: https://shortcut.ai/docs/platform-api
+  notes: 'Usage export lives under /api/v1/team/usage-export; spreadsheet automation
+    routes are unversioned under /api/spreadsheets. OpenAPI info.version is 1.0.0.'
+changelog: https://shortcut.ai/changelog
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: 'No formal deprecation policy or RFC 8594 Sunset/Deprecation header support
+    documented. One backward-incompatible change is noted in-spec: older folder-name-only
+    skill ids are rejected in favor of source-qualified ids (default:/personal:/team:).'
+sla:
+  url: null
+  notes: 'Custom SLA is offered on the Enterprise plan (https://shortcut.ai/pricing);
+    no public uptime target published.'
+status_page: null
+deprecated_operations: []

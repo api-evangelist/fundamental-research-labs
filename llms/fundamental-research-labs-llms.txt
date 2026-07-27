@@ -1,0 +1,87 @@
+# Shortcut Documentation
+
+Shortcut is the most powerful AI for Excel. Tell it what you need and watch it go. Shortcut can build just about anything in Excel. LBOs, Waterfalls, DCFs, 3 Statements, etc.
+
+## Pages
+- https://shortcut.ai/
+- https://shortcut.ai/blog
+- https://shortcut.ai/changelog
+- https://shortcut.ai/enterprise
+- https://shortcut.ai/home
+- https://shortcut.ai/pricing
+- https://shortcut.ai/privacy
+- https://shortcut.ai/shortcut
+- https://shortcut.ai/subscribe
+- https://shortcut.ai/support
+- https://shortcut.ai/team
+- https://shortcut.ai/teams-plan
+- https://shortcut.ai/templates
+- https://shortcut.ai/tutorial
+
+## Blog Posts
+- https://shortcut.ai/blog/posts/introducing-pivot
+- https://shortcut.ai/blog/posts/opus-48-vs-gpt-55
+- https://shortcut.ai/blog/posts/introducing-shortcutxl
+- https://shortcut.ai/blog/posts/claude-vs-gpt-for-excel
+- https://shortcut.ai/blog/posts/v0-8-release
+- https://shortcut.ai/blog/posts/shortcut-safe
+- https://shortcut.ai/blog/posts/live-dashboards
+- https://shortcut.ai/blog/posts/shortcutxl-cli
+- https://shortcut.ai/blog/posts/skillstudio
+- https://shortcut.ai/blog/posts/meet-shorty
+- https://shortcut.ai/blog/posts/agi-1b-spreadsheet-workers
+- https://shortcut.ai/blog/posts/wsp-ranked-1
+- https://shortcut.ai/blog/posts/excel-ai-revolution
+- https://shortcut.ai/blog/posts/v0-6-release
+- https://shortcut.ai/blog/posts/spreadsheetbench-verified
+- https://shortcut.ai/blog/posts/accounting-ai-bank-reconciliation
+- https://shortcut.ai/blog/posts/spreadsheetbench
+- https://shortcut.ai/blog/posts/benchmarks-explained
+- https://shortcut.ai/blog/posts/financial-data-automation
+- https://shortcut.ai/blog/posts/claude-vs-shortcut
+- https://shortcut.ai/blog/posts/excel-plugin-updates
+- https://shortcut.ai/blog/posts/analyst-in-pocket
+- https://shortcut.ai/blog/posts/transformer-in-excel
+- https://shortcut.ai/blog/posts/templates-power
+- https://shortcut.ai/blog/posts/anything-human-can-do
+- https://shortcut.ai/blog/posts/excel-understanding
+- https://shortcut.ai/blog/posts/20-percent-better
+- https://shortcut.ai/blog/posts/analyst-benchmark
+- https://shortcut.ai/blog/posts/intro
+- https://shortcut.ai/blog/posts/shortcut-ai
+- https://shortcut.ai/blog/posts/shortcut-excel
+- https://shortcut.ai/blog/posts/tryshortcut-ai
+- https://shortcut.ai/blog/posts/shortcut-ai-pricing
+- https://shortcut.ai/blog/posts/excel-ai
+- https://shortcut.ai/blog/posts/ai-for-excel
+- https://shortcut.ai/blog/posts/financial-modeling-ai
+- https://shortcut.ai/blog/posts/lbo-model
+- https://shortcut.ai/blog/posts/spreadsheet-ai
+- https://shortcut.ai/blog/posts/three-statement-model
+- https://shortcut.ai/blog/posts/excel-ai-assistant
+- https://shortcut.ai/blog/posts/dcf-model
+- https://shortcut.ai/blog/posts/pdf-upload
+- https://shortcut.ai/blog/posts/import-templates
+- https://shortcut.ai/blog/posts/targeted-edits
+- https://shortcut.ai/blog/posts/excel-plugin
+- https://shortcut.ai/blog/posts/edgar-sec-filings
+- https://shortcut.ai/blog/posts/web-data
+- https://shortcut.ai/blog/posts/privacy
+- https://shortcut.ai/blog/posts/prompt-library
+- https://shortcut.ai/blog/posts/ai-preferences
+- https://shortcut.ai/blog/posts/ask-mode
+- https://shortcut.ai/blog/posts/ask-mode-learning
+- https://shortcut.ai/blog/posts/shortcut-plugin-webapp
+
+## Features
+- Excel file import/export (.xlsx, .xls, .csv)
+- AI-powered formula generation with Claude, GPT-4, and Gemini
+- Real-time collaboration and sharing
+- Natural language data manipulation
+- Charts and pivot tables
+- PDF export
+- Desktop application (Windows, macOS, Linux)
+
+## Support
+- https://shortcut.ai/support
+- Email: support@shortcut.com

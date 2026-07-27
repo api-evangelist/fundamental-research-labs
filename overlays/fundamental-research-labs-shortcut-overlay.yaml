@@ -1,0 +1,46 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Shortcut API
+  version: 1.0.0
+extends: openapi/fundamental-research-labs-openapi-original.json
+x-generated: '2026-07-19'
+x-method: generated
+x-note: >-
+  The published Shortcut OpenAPI omits operationIds and top-level tag ordering.
+  This overlay adds stable operationIds (our naming) and an API Evangelist rating
+  marker without mutating the harvested original spec.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-rating: 4
+    x-apievangelist-reviewed: '2026-07-19'
+- target: $.paths['/api/spreadsheets'].post
+  update:
+    operationId: submitSpreadsheetJob
+- target: $.paths['/api/spreadsheets'].get
+  update:
+    operationId: listSpreadsheetRuns
+- target: $.paths['/api/spreadsheets/verify'].get
+  update:
+    operationId: verifyApiKey
+- target: $.paths['/api/spreadsheets/skills'].get
+  update:
+    operationId: listSkills
+- target: $.paths['/api/spreadsheets/upload'].post
+  update:
+    operationId: uploadFile
+- target: $.paths['/api/spreadsheets/{runId}'].get
+  update:
+    operationId: getSpreadsheetJobStatus
+- target: $.paths['/api/spreadsheets/{runId}/cancel'].post
+  update:
+    operationId: cancelSpreadsheetJob
+- target: $.paths['/api/spreadsheets/{runId}/download'].get
+  update:
+    operationId: downloadSpreadsheetResult
+- target: $.paths['/api/spreadsheets/{runId}/artifacts/{filename}'].get
+  update:
+    operationId: downloadArtifact
+- target: $.paths['/api/v1/team/usage-export'].get
+  update:
+    operationId: exportTeamUsage
