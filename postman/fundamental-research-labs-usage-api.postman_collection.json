@@ -1,0 +1,215 @@
+{
+  "info": {
+    "_postman_id": "0a3b6dee-55ef-49a1-add1-3975f9989445",
+    "name": "Shortcut Authentication Usage API",
+    "description": "Shortcut API lets teams automate spreadsheet workflows and export organization usage data programmatically.\n\n## Getting Started\n\n### Create an API key\n\n1. Go to [shortcut.ai](https://shortcut.ai)\n2. Navigate to **Settings \u2192 API Keys**\n3. Create a new API key\n\nExternal callers use an API key in the `Authorization` header as a Bearer token:\n`Authorization: Bearer sc-xxx`\n\nAuthenticated Shortcut applications can call spreadsheet automation routes with\nthe user's Shortcut session or access token for run, upload, status, download,\nskills, and cancel operations. Non-browser applications send the JWT as a\nbearer token; Shortcut web applications may use the same JWT through the\n`shortcut_access_token` cookie in a credentialed request from a trusted\nShortcut origin. `/verify` and webhooks require API key authentication because\nthey depend on API key and webhook-secret state.\n\n### Spreadsheet automation workflow\n\n1. **Verify your API key**: `GET /api/spreadsheets/verify`\n2. **Submit a job**: `POST /api/spreadsheets` with a prompt\n3. **Check status**: `GET /api/spreadsheets/:runId` (poll until completed, failed, or error)\n4. **Download result**: `GET /api/spreadsheets/:runId/download`\n\n### Usage export workflow\n\n1. Open **Usage Metrics** in Shortcut.\n2. Copy the prefilled command from **Programmatic export**.\n3. Use the Usage API reference to customize date range, format, or grouping.\n\n### Spreadsheet automation limits\n\n- Maximum 2000 concurrent jobs per API key\n- Job timeout: 30 minutes (configurable up to 120 minutes)\n",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:43:22.000Z",
+    "updatedAt": "2026-07-28T01:43:22.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-0a3b6dee-55ef-49a1-add1-3975f9989445"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "v1",
+          "item": [
+            {
+              "name": "team",
+              "item": [
+                {
+                  "name": "usage-export",
+                  "item": [
+                    {
+                      "name": "Export team usage metrics",
+                      "id": "e32961f6-dc8c-401a-816e-abdb7578a39a",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/team/usage-export?team_id=<string>&period=month&start_date=<string>&end_date=<string>&timezone=UTC&format=json&report=summary&group_by=platform",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "team",
+                            "usage-export"
+                          ],
+                          "query": [
+                            {
+                              "description": "Team or organization ID to export. Required for API-key integrations. Usage Metrics shows a prefilled request for the current organization.",
+                              "key": "team_id",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Relative date range to export when start_date and end_date are omitted.",
+                              "key": "period",
+                              "value": "month"
+                            },
+                            {
+                              "description": "YYYY-MM-DD. Must be provided together with end_date; takes precedence over period.",
+                              "key": "start_date",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "YYYY-MM-DD. Must be provided together with start_date; takes precedence over period.",
+                              "key": "end_date",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "IANA timezone used to resolve relative periods and day boundaries.",
+                              "key": "timezone",
+                              "value": "UTC"
+                            },
+                            {
+                              "description": "Response format.",
+                              "key": "format",
+                              "value": "json"
+                            },
+                            {
+                              "description": "CSV only. summary exports per-member totals; daily exports member usage by day.",
+                              "key": "report",
+                              "value": "summary"
+                            },
+                            {
+                              "description": "JSON only. Add platform usage breakdowns to the response.",
+                              "key": "group_by",
+                              "value": "platform"
+                            }
+                          ]
+                        },
+                        "description": "Export team usage metrics as JSON or CSV. Usage Metrics in Shortcut provides a prefilled request with your team_id; use these query parameters to customize the date range, output format, and optional platform grouping. API keys must belong to a user with usage metrics access for the requested team or organization."
+                      },
+                      "response": [
+                        {
+                          "id": "6c2b28e6-917f-4bd5-b053-dd2e99d795c0",
+                          "name": "Default Response",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/team/usage-export?team_id=<string>&period=month&start_date=<string>&end_date=<string>&timezone=UTC&format=json&report=summary&group_by=platform",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "team",
+                                "usage-export"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Team or organization ID to export. Required for API-key integrations. Usage Metrics shows a prefilled request for the current organization.",
+                                  "key": "team_id",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Relative date range to export when start_date and end_date are omitted.",
+                                  "key": "period",
+                                  "value": "month"
+                                },
+                                {
+                                  "description": "YYYY-MM-DD. Must be provided together with end_date; takes precedence over period.",
+                                  "key": "start_date",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "YYYY-MM-DD. Must be provided together with start_date; takes precedence over period.",
+                                  "key": "end_date",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "IANA timezone used to resolve relative periods and day boundaries.",
+                                  "key": "timezone",
+                                  "value": "UTC"
+                                },
+                                {
+                                  "description": "Response format.",
+                                  "key": "format",
+                                  "value": "json"
+                                },
+                                {
+                                  "description": "CSV only. summary exports per-member totals; daily exports member usage by day.",
+                                  "key": "report",
+                                  "value": "summary"
+                                },
+                                {
+                                  "description": "JSON only. Add platform usage breakdowns to the response.",
+                                  "key": "group_by",
+                                  "value": "platform"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-07-28T01:43:22.000Z",
+                          "updatedAt": "2026-07-28T01:43:22.000Z",
+                          "uid": "35240-6c2b28e6-917f-4bd5-b053-dd2e99d795c0"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:43:22.000Z",
+                      "updatedAt": "2026-07-28T01:43:22.000Z",
+                      "uid": "35240-e32961f6-dc8c-401a-816e-abdb7578a39a"
+                    }
+                  ],
+                  "id": "6268d4e7-1129-403f-9aa2-5b6198b4012c",
+                  "createdAt": "2026-07-28T01:43:22.000Z",
+                  "updatedAt": "2026-07-28T01:43:22.000Z",
+                  "uid": "35240-6268d4e7-1129-403f-9aa2-5b6198b4012c"
+                }
+              ],
+              "id": "be7b6f31-d328-434e-86a5-0b692827da2a",
+              "createdAt": "2026-07-28T01:43:22.000Z",
+              "updatedAt": "2026-07-28T01:43:22.000Z",
+              "uid": "35240-be7b6f31-d328-434e-86a5-0b692827da2a"
+            }
+          ],
+          "id": "659eccdb-cf30-47e3-bc30-5f514d404051",
+          "createdAt": "2026-07-28T01:43:22.000Z",
+          "updatedAt": "2026-07-28T01:43:22.000Z",
+          "uid": "35240-659eccdb-cf30-47e3-bc30-5f514d404051"
+        }
+      ],
+      "id": "68842b92-1dc0-4175-ba6e-c83c173d6ddb",
+      "createdAt": "2026-07-28T01:43:22.000Z",
+      "updatedAt": "2026-07-28T01:43:22.000Z",
+      "uid": "35240-68842b92-1dc0-4175-ba6e-c83c173d6ddb"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "/"
+    }
+  ]
+}

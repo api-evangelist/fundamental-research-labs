@@ -1,0 +1,2370 @@
+{
+  "info": {
+    "_postman_id": "39b57d7f-de02-4f45-a5d7-63c0c7c1b7e0",
+    "name": "Shortcut Authentication Spreadsheets API",
+    "description": "Shortcut API lets teams automate spreadsheet workflows and export organization usage data programmatically.\n\n## Getting Started\n\n### Create an API key\n\n1. Go to [shortcut.ai](https://shortcut.ai)\n2. Navigate to **Settings \u2192 API Keys**\n3. Create a new API key\n\nExternal callers use an API key in the `Authorization` header as a Bearer token:\n`Authorization: Bearer sc-xxx`\n\nAuthenticated Shortcut applications can call spreadsheet automation routes with\nthe user's Shortcut session or access token for run, upload, status, download,\nskills, and cancel operations. Non-browser applications send the JWT as a\nbearer token; Shortcut web applications may use the same JWT through the\n`shortcut_access_token` cookie in a credentialed request from a trusted\nShortcut origin. `/verify` and webhooks require API key authentication because\nthey depend on API key and webhook-secret state.\n\n### Spreadsheet automation workflow\n\n1. **Verify your API key**: `GET /api/spreadsheets/verify`\n2. **Submit a job**: `POST /api/spreadsheets` with a prompt\n3. **Check status**: `GET /api/spreadsheets/:runId` (poll until completed, failed, or error)\n4. **Download result**: `GET /api/spreadsheets/:runId/download`\n\n### Usage export workflow\n\n1. Open **Usage Metrics** in Shortcut.\n2. Copy the prefilled command from **Programmatic export**.\n3. Use the Usage API reference to customize date range, format, or grouping.\n\n### Spreadsheet automation limits\n\n- Maximum 2000 concurrent jobs per API key\n- Job timeout: 30 minutes (configurable up to 120 minutes)\n",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:43:21.000Z",
+    "updatedAt": "2026-07-28T01:43:21.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-39b57d7f-de02-4f45-a5d7-63c0c7c1b7e0"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "spreadsheets",
+          "item": [
+            {
+              "name": "skills",
+              "item": [
+                {
+                  "name": "List Skills",
+                  "id": "d51ba55e-f72b-4924-adfd-c7785e4262e0",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/spreadsheets/skills",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "spreadsheets",
+                        "skills"
+                      ]
+                    },
+                    "description": "List available skills (built-in/default, personal, and team). The returned `id` is source-qualified and is the only accepted value for `POST /api/spreadsheets` `skills`; older folder-name-only ids are rejected. The web UI labels default skills as Official, but the API id prefix is `default:`."
+                  },
+                  "response": [
+                    {
+                      "id": "5ef79d5a-89f8-4d63-917f-41d9cfce96e0",
+                      "name": "Default Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/skills",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            "skills"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"skills\": [\n    {\n      \"id\": \"<string>\",\n      \"folderName\": \"<string>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"source\": \"user\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"folderName\": \"<string>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"source\": \"default\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-5ef79d5a-89f8-4d63-917f-41d9cfce96e0"
+                    },
+                    {
+                      "id": "a1c1468b-042e-4b29-b637-34ebf85cb57b",
+                      "name": "Default Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/skills",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            "skills"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-a1c1468b-042e-4b29-b637-34ebf85cb57b"
+                    },
+                    {
+                      "id": "87923c7a-6b20-4e02-9b37-aa7e71e3d686",
+                      "name": "Default Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/skills",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            "skills"
+                          ]
+                        }
+                      },
+                      "status": "Service Unavailable",
+                      "code": 503,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-87923c7a-6b20-4e02-9b37-aa7e71e3d686"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-d51ba55e-f72b-4924-adfd-c7785e4262e0"
+                }
+              ],
+              "id": "9a31968d-2375-4d65-9602-41d98a4e2ec2",
+              "createdAt": "2026-07-28T01:43:21.000Z",
+              "updatedAt": "2026-07-28T01:43:21.000Z",
+              "uid": "35240-9a31968d-2375-4d65-9602-41d98a4e2ec2"
+            },
+            {
+              "name": "upload",
+              "item": [
+                {
+                  "name": "Upload File",
+                  "id": "3564722e-dece-45fc-908e-7f7e7cb3ca5c",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/spreadsheets/upload",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "spreadsheets",
+                        "upload"
+                      ]
+                    },
+                    "description": "Upload a file to use in spreadsheet jobs. Returns a file ID."
+                  },
+                  "response": [
+                    {
+                      "id": "ab190887-3895-4b34-8a54-c158dae94bdc",
+                      "name": "Default Response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/upload",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            "upload"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": true,\n  \"fileId\": \"<uuid>\"\n}",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-ab190887-3895-4b34-8a54-c158dae94bdc"
+                    },
+                    {
+                      "id": "f503b1d8-d217-4bea-aa1f-cdc3d41555b7",
+                      "name": "Default Response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/upload",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            "upload"
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-f503b1d8-d217-4bea-aa1f-cdc3d41555b7"
+                    },
+                    {
+                      "id": "6d60ca20-e940-4c5d-860a-cf747423ce62",
+                      "name": "Default Response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/upload",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            "upload"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-6d60ca20-e940-4c5d-860a-cf747423ce62"
+                    },
+                    {
+                      "id": "fc2f6d77-857a-446e-a314-35be6738e8a2",
+                      "name": "Default Response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/upload",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            "upload"
+                          ]
+                        }
+                      },
+                      "status": "Request Entity Too Large",
+                      "code": 413,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-fc2f6d77-857a-446e-a314-35be6738e8a2"
+                    },
+                    {
+                      "id": "e312b78c-dd2b-4f86-92ee-ee44366b4697",
+                      "name": "Default Response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/upload",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            "upload"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-e312b78c-dd2b-4f86-92ee-ee44366b4697"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-3564722e-dece-45fc-908e-7f7e7cb3ca5c"
+                }
+              ],
+              "id": "e7887776-382a-4edd-b47e-d5903a4e1c2b",
+              "createdAt": "2026-07-28T01:43:21.000Z",
+              "updatedAt": "2026-07-28T01:43:21.000Z",
+              "uid": "35240-e7887776-382a-4edd-b47e-d5903a4e1c2b"
+            },
+            {
+              "name": "{runId}",
+              "item": [
+                {
+                  "name": "cancel",
+                  "item": [
+                    {
+                      "name": "Cancel Spreadsheet Job",
+                      "id": "21ae5ff6-3107-4ba2-9541-10c0b063060d",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/:runId/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            ":runId",
+                            "cancel"
+                          ],
+                          "variable": [
+                            {
+                              "id": "3f837211-d6d1-4f3d-b1e0-44c359a9c18f",
+                              "key": "runId",
+                              "value": "<string>",
+                              "description": "(Required) Unique run identifier"
+                            }
+                          ]
+                        },
+                        "description": "Cancel an active spreadsheet processing job. Active queued/running runs are marked cancelled and any live execution sandbox is terminated best-effort."
+                      },
+                      "response": [
+                        {
+                          "id": "0bab9f6c-63c8-439b-98cb-c85cdc82ee66",
+                          "name": "Default Response",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/spreadsheets/:runId/cancel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "spreadsheets",
+                                ":runId",
+                                "cancel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "runId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"runId\": \"<string>\",\n  \"status\": \"cancelled\",\n  \"previousStatus\": \"queued\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:21.000Z",
+                          "updatedAt": "2026-07-28T01:43:21.000Z",
+                          "uid": "35240-0bab9f6c-63c8-439b-98cb-c85cdc82ee66"
+                        },
+                        {
+                          "id": "bbc61f6c-d935-4265-91d8-3f132ffd98a0",
+                          "name": "Default Response",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/spreadsheets/:runId/cancel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "spreadsheets",
+                                ":runId",
+                                "cancel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "runId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:21.000Z",
+                          "updatedAt": "2026-07-28T01:43:21.000Z",
+                          "uid": "35240-bbc61f6c-d935-4265-91d8-3f132ffd98a0"
+                        },
+                        {
+                          "id": "04cd8b01-30cb-4690-8dc1-e61032b264fa",
+                          "name": "Default Response",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/spreadsheets/:runId/cancel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "spreadsheets",
+                                ":runId",
+                                "cancel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "runId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:21.000Z",
+                          "updatedAt": "2026-07-28T01:43:21.000Z",
+                          "uid": "35240-04cd8b01-30cb-4690-8dc1-e61032b264fa"
+                        },
+                        {
+                          "id": "653e72a5-1884-42dd-8a76-1208dd829f77",
+                          "name": "Default Response",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/spreadsheets/:runId/cancel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "spreadsheets",
+                                ":runId",
+                                "cancel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "runId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:21.000Z",
+                          "updatedAt": "2026-07-28T01:43:21.000Z",
+                          "uid": "35240-653e72a5-1884-42dd-8a76-1208dd829f77"
+                        },
+                        {
+                          "id": "99dd0e83-4f6d-4d68-acfe-02ff30c35e87",
+                          "name": "Default Response",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/spreadsheets/:runId/cancel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "spreadsheets",
+                                ":runId",
+                                "cancel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "runId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Conflict",
+                          "code": 409,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:21.000Z",
+                          "updatedAt": "2026-07-28T01:43:21.000Z",
+                          "uid": "35240-99dd0e83-4f6d-4d68-acfe-02ff30c35e87"
+                        },
+                        {
+                          "id": "aa9af901-d924-4159-acd8-c8d396837224",
+                          "name": "Default Response",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/spreadsheets/:runId/cancel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "spreadsheets",
+                                ":runId",
+                                "cancel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "runId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:21.000Z",
+                          "updatedAt": "2026-07-28T01:43:21.000Z",
+                          "uid": "35240-aa9af901-d924-4159-acd8-c8d396837224"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-21ae5ff6-3107-4ba2-9541-10c0b063060d"
+                    }
+                  ],
+                  "id": "d8649cf7-d744-49e2-a9e3-38c519f46dc5",
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-d8649cf7-d744-49e2-a9e3-38c519f46dc5"
+                },
+                {
+                  "name": "download",
+                  "item": [
+                    {
+                      "name": "Download Spreadsheet Result",
+                      "id": "37f852ab-96be-477a-b14f-3f1bb040bfc9",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/:runId/download",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            ":runId",
+                            "download"
+                          ],
+                          "variable": [
+                            {
+                              "id": "7d470a16-b4c8-49b4-8135-acd61e227513",
+                              "key": "runId",
+                              "value": "<string>",
+                              "description": "(Required) Unique run identifier"
+                            }
+                          ]
+                        },
+                        "description": "Download the processed Excel file for a completed workbook-producing job"
+                      },
+                      "response": [
+                        {
+                          "id": "78237c0f-81a9-4a1e-b028-2bb84d94e440",
+                          "name": "Binary Excel file",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/spreadsheets/:runId/download",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "spreadsheets",
+                                ":runId",
+                                "download"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "runId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "<binary>",
+                          "createdAt": "2026-07-28T01:43:21.000Z",
+                          "updatedAt": "2026-07-28T01:43:21.000Z",
+                          "uid": "35240-78237c0f-81a9-4a1e-b028-2bb84d94e440"
+                        },
+                        {
+                          "id": "f0d31cfe-d965-461f-97d7-372e153e62c3",
+                          "name": "Default Response",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/spreadsheets/:runId/download",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "spreadsheets",
+                                ":runId",
+                                "download"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "runId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:21.000Z",
+                          "updatedAt": "2026-07-28T01:43:21.000Z",
+                          "uid": "35240-f0d31cfe-d965-461f-97d7-372e153e62c3"
+                        },
+                        {
+                          "id": "c3843a82-476f-472b-bbe7-95e3a6354023",
+                          "name": "Default Response",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/spreadsheets/:runId/download",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "spreadsheets",
+                                ":runId",
+                                "download"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "runId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:21.000Z",
+                          "updatedAt": "2026-07-28T01:43:21.000Z",
+                          "uid": "35240-c3843a82-476f-472b-bbe7-95e3a6354023"
+                        },
+                        {
+                          "id": "3e4ce0b0-b9c9-412a-a64f-cf7462cc632b",
+                          "name": "Default Response",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/spreadsheets/:runId/download",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "spreadsheets",
+                                ":runId",
+                                "download"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "runId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:21.000Z",
+                          "updatedAt": "2026-07-28T01:43:21.000Z",
+                          "uid": "35240-3e4ce0b0-b9c9-412a-a64f-cf7462cc632b"
+                        },
+                        {
+                          "id": "4055dac4-b49a-4dbe-918b-862b8133ea45",
+                          "name": "Default Response",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/spreadsheets/:runId/download",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "spreadsheets",
+                                ":runId",
+                                "download"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "runId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Conflict",
+                          "code": 409,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:21.000Z",
+                          "updatedAt": "2026-07-28T01:43:21.000Z",
+                          "uid": "35240-4055dac4-b49a-4dbe-918b-862b8133ea45"
+                        },
+                        {
+                          "id": "f523c2e9-cf65-46c4-b871-223d8efd5309",
+                          "name": "Default Response",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/spreadsheets/:runId/download",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "spreadsheets",
+                                ":runId",
+                                "download"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "runId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:21.000Z",
+                          "updatedAt": "2026-07-28T01:43:21.000Z",
+                          "uid": "35240-f523c2e9-cf65-46c4-b871-223d8efd5309"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-37f852ab-96be-477a-b14f-3f1bb040bfc9"
+                    }
+                  ],
+                  "id": "00fb9dc7-dc89-40c6-a84b-f128b6fc98bb",
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-00fb9dc7-dc89-40c6-a84b-f128b6fc98bb"
+                },
+                {
+                  "name": "artifacts",
+                  "item": [
+                    {
+                      "name": "{filename}",
+                      "item": [
+                        {
+                          "name": "Download Artifact",
+                          "id": "2213bea6-a506-467d-a37a-f1443312344c",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "auth": {
+                              "type": "bearer",
+                              "bearer": [
+                                {
+                                  "key": "token",
+                                  "value": "{{bearerToken}}",
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/spreadsheets/:runId/artifacts/:filename",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "spreadsheets",
+                                ":runId",
+                                "artifacts",
+                                ":filename"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "4c5f5736-3540-47cd-9242-12e116c104ae",
+                                  "key": "runId",
+                                  "value": "<string>",
+                                  "description": "(Required) Unique run identifier"
+                                },
+                                {
+                                  "id": "692a7b17-5c26-4120-9d2d-1894e0b83b05",
+                                  "key": "filename",
+                                  "value": "<string>",
+                                  "description": "(Required) Artifact filename"
+                                }
+                              ]
+                            },
+                            "description": "Download a specific artifact file produced by a job."
+                          },
+                          "response": [
+                            {
+                              "id": "4ab9060b-e15f-4011-a29d-d70bdfd9a1e7",
+                              "name": "Default Response",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/spreadsheets/:runId/artifacts/:filename",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "spreadsheets",
+                                    ":runId",
+                                    "artifacts",
+                                    ":filename"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "runId"
+                                    },
+                                    {
+                                      "key": "filename"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:43:21.000Z",
+                              "updatedAt": "2026-07-28T01:43:21.000Z",
+                              "uid": "35240-4ab9060b-e15f-4011-a29d-d70bdfd9a1e7"
+                            },
+                            {
+                              "id": "3baca23c-f2c3-4097-aafe-caa18a1fb689",
+                              "name": "Default Response",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/spreadsheets/:runId/artifacts/:filename",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "spreadsheets",
+                                    ":runId",
+                                    "artifacts",
+                                    ":filename"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "runId"
+                                    },
+                                    {
+                                      "key": "filename"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:43:21.000Z",
+                              "updatedAt": "2026-07-28T01:43:21.000Z",
+                              "uid": "35240-3baca23c-f2c3-4097-aafe-caa18a1fb689"
+                            },
+                            {
+                              "id": "b47f2a5f-f128-4d22-a95e-565ab0ac3309",
+                              "name": "Default Response",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/spreadsheets/:runId/artifacts/:filename",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "spreadsheets",
+                                    ":runId",
+                                    "artifacts",
+                                    ":filename"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "runId"
+                                    },
+                                    {
+                                      "key": "filename"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:43:21.000Z",
+                              "updatedAt": "2026-07-28T01:43:21.000Z",
+                              "uid": "35240-b47f2a5f-f128-4d22-a95e-565ab0ac3309"
+                            },
+                            {
+                              "id": "84d94c29-261b-42e8-9713-2b7aee4eadac",
+                              "name": "Default Response",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/spreadsheets/:runId/artifacts/:filename",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "spreadsheets",
+                                    ":runId",
+                                    "artifacts",
+                                    ":filename"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "runId"
+                                    },
+                                    {
+                                      "key": "filename"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:43:21.000Z",
+                              "updatedAt": "2026-07-28T01:43:21.000Z",
+                              "uid": "35240-84d94c29-261b-42e8-9713-2b7aee4eadac"
+                            }
+                          ],
+                          "createdAt": "2026-07-28T01:43:21.000Z",
+                          "updatedAt": "2026-07-28T01:43:21.000Z",
+                          "uid": "35240-2213bea6-a506-467d-a37a-f1443312344c"
+                        }
+                      ],
+                      "id": "a11b5c2c-7e9b-4d46-8938-c3ded1bf587d",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-a11b5c2c-7e9b-4d46-8938-c3ded1bf587d"
+                    }
+                  ],
+                  "id": "5253fe3b-56d5-43fd-889d-08fce04cd5d3",
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-5253fe3b-56d5-43fd-889d-08fce04cd5d3"
+                },
+                {
+                  "name": "Get Spreadsheet Job Status",
+                  "id": "e1ea7645-dd22-4a62-af70-762a708a6226",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/spreadsheets/:runId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "spreadsheets",
+                        ":runId"
+                      ],
+                      "variable": [
+                        {
+                          "id": "d732580b-57b2-4713-8085-36ed4b77f678",
+                          "key": "runId",
+                          "value": "<string>",
+                          "description": "(Required) Unique run identifier"
+                        }
+                      ]
+                    },
+                    "description": "Check the status of a spreadsheet processing job. Returns queued, running, finalizing, completed, failed, or cancelled status."
+                  },
+                  "response": [
+                    {
+                      "id": "999b2629-3b6b-4b96-b23b-27d90e2ea5d8",
+                      "name": "Default Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/:runId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            ":runId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "runId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"runId\": \"<string>\",\n  \"status\": \"completed\",\n  \"artifacts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"downloadUrl\": \"<string>\",\n  \"summary\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-999b2629-3b6b-4b96-b23b-27d90e2ea5d8"
+                    },
+                    {
+                      "id": "0aefbd32-dfba-42e1-80d9-04222fc15b0d",
+                      "name": "Default Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/:runId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            ":runId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "runId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-0aefbd32-dfba-42e1-80d9-04222fc15b0d"
+                    },
+                    {
+                      "id": "4649ddb6-6344-4ad5-8d50-2d64b71988c1",
+                      "name": "Default Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/:runId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            ":runId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "runId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-4649ddb6-6344-4ad5-8d50-2d64b71988c1"
+                    },
+                    {
+                      "id": "f695b12c-f680-4d0b-b9bd-006518830596",
+                      "name": "Default Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/:runId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            ":runId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "runId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-f695b12c-f680-4d0b-b9bd-006518830596"
+                    },
+                    {
+                      "id": "6ac39a42-c8a7-4647-8a58-4e1d7734c251",
+                      "name": "Default Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/spreadsheets/:runId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "spreadsheets",
+                            ":runId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "runId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:43:21.000Z",
+                      "updatedAt": "2026-07-28T01:43:21.000Z",
+                      "uid": "35240-6ac39a42-c8a7-4647-8a58-4e1d7734c251"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-e1ea7645-dd22-4a62-af70-762a708a6226"
+                }
+              ],
+              "id": "1be06409-17d6-4517-9162-4296b360118a",
+              "createdAt": "2026-07-28T01:43:21.000Z",
+              "updatedAt": "2026-07-28T01:43:21.000Z",
+              "uid": "35240-1be06409-17d6-4517-9162-4296b360118a"
+            },
+            {
+              "name": "Submit Spreadsheet Processing Job",
+              "id": "faed38cb-ab7d-4702-847c-5ecca15277a8",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt\": \"<string>\",\n  \"initFile\": \"<uuid>\",\n  \"contextFiles\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"timeoutSeconds\": \"<integer>\",\n  \"webhookUrl\": \"<uri>\",\n  \"mode\": \"action\",\n  \"model\": \"<string>\",\n  \"thinking\": \"minimal\",\n  \"projectId\": \"<uuid>\",\n  \"skills\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"debug\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/spreadsheets",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "spreadsheets"
+                  ]
+                },
+                "description": "Submit a natural language prompt to process a spreadsheet. Optionally provide an initial Excel file and context files."
+              },
+              "response": [
+                {
+                  "id": "d68ec81c-ab4f-41b6-b561-2a5b88ef96db",
+                  "name": "Default Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"prompt\": \"<string>\",\n  \"initFile\": \"<uuid>\",\n  \"contextFiles\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"timeoutSeconds\": \"<integer>\",\n  \"webhookUrl\": \"<uri>\",\n  \"mode\": \"action\",\n  \"model\": \"<string>\",\n  \"thinking\": \"minimal\",\n  \"projectId\": \"<uuid>\",\n  \"skills\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"debug\": \"<boolean>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/spreadsheets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "spreadsheets"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"runId\": \"<string>\",\n  \"status\": \"running\"\n}",
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-d68ec81c-ab4f-41b6-b561-2a5b88ef96db"
+                },
+                {
+                  "id": "75a80ea5-2f34-4f5a-b9f2-d564ce58f7dc",
+                  "name": "Default Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"prompt\": \"<string>\",\n  \"initFile\": \"<uuid>\",\n  \"contextFiles\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"timeoutSeconds\": \"<integer>\",\n  \"webhookUrl\": \"<uri>\",\n  \"mode\": \"action\",\n  \"model\": \"<string>\",\n  \"thinking\": \"minimal\",\n  \"projectId\": \"<uuid>\",\n  \"skills\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"debug\": \"<boolean>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/spreadsheets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "spreadsheets"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-75a80ea5-2f34-4f5a-b9f2-d564ce58f7dc"
+                },
+                {
+                  "id": "ce797086-26ae-4c38-8061-fdb41d4d80dc",
+                  "name": "Default Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"prompt\": \"<string>\",\n  \"initFile\": \"<uuid>\",\n  \"contextFiles\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"timeoutSeconds\": \"<integer>\",\n  \"webhookUrl\": \"<uri>\",\n  \"mode\": \"action\",\n  \"model\": \"<string>\",\n  \"thinking\": \"minimal\",\n  \"projectId\": \"<uuid>\",\n  \"skills\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"debug\": \"<boolean>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/spreadsheets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "spreadsheets"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-ce797086-26ae-4c38-8061-fdb41d4d80dc"
+                },
+                {
+                  "id": "f3423082-3b90-4d84-ad53-284fffe29b40",
+                  "name": "Default Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"prompt\": \"<string>\",\n  \"initFile\": \"<uuid>\",\n  \"contextFiles\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"timeoutSeconds\": \"<integer>\",\n  \"webhookUrl\": \"<uri>\",\n  \"mode\": \"action\",\n  \"model\": \"<string>\",\n  \"thinking\": \"minimal\",\n  \"projectId\": \"<uuid>\",\n  \"skills\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"debug\": \"<boolean>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/spreadsheets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "spreadsheets"
+                      ]
+                    }
+                  },
+                  "status": "Payment Required",
+                  "code": 402,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-f3423082-3b90-4d84-ad53-284fffe29b40"
+                },
+                {
+                  "id": "a4e49e7c-87a1-4218-8202-948326507cbf",
+                  "name": "Default Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"prompt\": \"<string>\",\n  \"initFile\": \"<uuid>\",\n  \"contextFiles\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"timeoutSeconds\": \"<integer>\",\n  \"webhookUrl\": \"<uri>\",\n  \"mode\": \"action\",\n  \"model\": \"<string>\",\n  \"thinking\": \"minimal\",\n  \"projectId\": \"<uuid>\",\n  \"skills\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"debug\": \"<boolean>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/spreadsheets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "spreadsheets"
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-a4e49e7c-87a1-4218-8202-948326507cbf"
+                },
+                {
+                  "id": "c393cf61-7eb4-4cca-b29a-80835267245c",
+                  "name": "Default Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"prompt\": \"<string>\",\n  \"initFile\": \"<uuid>\",\n  \"contextFiles\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"timeoutSeconds\": \"<integer>\",\n  \"webhookUrl\": \"<uri>\",\n  \"mode\": \"action\",\n  \"model\": \"<string>\",\n  \"thinking\": \"minimal\",\n  \"projectId\": \"<uuid>\",\n  \"skills\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"debug\": \"<boolean>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/spreadsheets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "spreadsheets"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-c393cf61-7eb4-4cca-b29a-80835267245c"
+                }
+              ],
+              "createdAt": "2026-07-28T01:43:21.000Z",
+              "updatedAt": "2026-07-28T01:43:21.000Z",
+              "uid": "35240-faed38cb-ab7d-4702-847c-5ecca15277a8"
+            },
+            {
+              "name": "List Spreadsheet Runs",
+              "id": "4b7a905d-2fcd-465d-b5b8-537ba5b91c9d",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/spreadsheets?limit=50&offset=0",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "spreadsheets"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ]
+                },
+                "description": "List past spreadsheet processing runs for the authenticated user."
+              },
+              "response": [
+                {
+                  "id": "9c9d9090-263a-4e5c-83a6-f11ed31c7c31",
+                  "name": "Default Response",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/spreadsheets?limit=50&offset=0",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "spreadsheets"
+                      ],
+                      "query": [
+                        {
+                          "key": "limit",
+                          "value": "50"
+                        },
+                        {
+                          "key": "offset",
+                          "value": "0"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"runs\": [\n    {\n      \"runId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"prompt\": \"<string>\",\n      \"createdAt\": \"<string>\",\n      \"completedAt\": \"<null,string>\",\n      \"creditsUsed\": \"<null,number>\",\n      \"summary\": \"<null,string>\"\n    },\n    {\n      \"runId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"prompt\": \"<string>\",\n      \"createdAt\": \"<string>\",\n      \"completedAt\": \"<null,string>\",\n      \"creditsUsed\": \"<null,number>\",\n      \"summary\": \"<null,string>\"\n    }\n  ],\n  \"limit\": \"<number>\",\n  \"offset\": \"<number>\"\n}",
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-9c9d9090-263a-4e5c-83a6-f11ed31c7c31"
+                },
+                {
+                  "id": "1f52809a-9786-4041-b139-9193494f3788",
+                  "name": "Default Response",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/spreadsheets?limit=50&offset=0",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "spreadsheets"
+                      ],
+                      "query": [
+                        {
+                          "key": "limit",
+                          "value": "50"
+                        },
+                        {
+                          "key": "offset",
+                          "value": "0"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"success\": false,\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:43:21.000Z",
+                  "updatedAt": "2026-07-28T01:43:21.000Z",
+                  "uid": "35240-1f52809a-9786-4041-b139-9193494f3788"
+                }
+              ],
+              "createdAt": "2026-07-28T01:43:21.000Z",
+              "updatedAt": "2026-07-28T01:43:21.000Z",
+              "uid": "35240-4b7a905d-2fcd-465d-b5b8-537ba5b91c9d"
+            }
+          ],
+          "id": "0f33faec-7c03-4017-8c08-2aca6777f38b",
+          "createdAt": "2026-07-28T01:43:21.000Z",
+          "updatedAt": "2026-07-28T01:43:21.000Z",
+          "uid": "35240-0f33faec-7c03-4017-8c08-2aca6777f38b"
+        }
+      ],
+      "id": "814ac64a-4cd5-4ebc-92c3-5ca6d167796d",
+      "createdAt": "2026-07-28T01:43:21.000Z",
+      "updatedAt": "2026-07-28T01:43:21.000Z",
+      "uid": "35240-814ac64a-4cd5-4ebc-92c3-5ca6d167796d"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "/"
+    }
+  ]
+}
