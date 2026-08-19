@@ -2,41 +2,47 @@ generated: '2026-07-19'
 method: derived
 status: candidate
 source: openapi/fundamental-research-labs-openapi-original.json
-notes: 'No official hosted/remote MCP server was found for Shortcut at time of
-  enrichment (checked docs, npm @modelcontextprotocol, and MCP registries). The
-  tools below are a CANDIDATE surface derived one-per-operation from the Shortcut
-  Platform OpenAPI, for a future MCP wrapper.'
+notes: No official hosted/remote MCP server was found for Shortcut at time of enrichment (checked docs,
+  npm @modelcontextprotocol, and MCP registries). The tools below are a CANDIDATE surface derived one-per-operation
+  from the Shortcut Platform OpenAPI, for a future MCP wrapper.
 server:
   name: shortcut
   transport: http
 tools:
 - name: submit_spreadsheet_job
-  description: Submit a natural-language prompt (optionally with an initial Excel file and context files) to generate or edit a spreadsheet.
-  source_operation: 'openapi/fundamental-research-labs-openapi-original.json#POST /api/spreadsheets'
+  description: Submit a natural-language prompt (optionally with an initial Excel file and context files)
+    to generate or edit a spreadsheet.
+  source_operation: openapi/fundamental-research-labs-openapi-original.json#POST /api/spreadsheets
 - name: list_spreadsheet_runs
   description: List past spreadsheet processing runs for the authenticated user.
-  source_operation: 'openapi/fundamental-research-labs-openapi-original.json#GET /api/spreadsheets'
+  source_operation: openapi/fundamental-research-labs-openapi-original.json#GET /api/spreadsheets
 - name: verify_api_key
   description: Verify that an API key is valid and return the webhook secret.
-  source_operation: 'openapi/fundamental-research-labs-openapi-original.json#GET /api/spreadsheets/verify'
+  source_operation: openapi/fundamental-research-labs-openapi-original.json#GET /api/spreadsheets/verify
 - name: list_skills
   description: List available agent skills (default, personal, team).
-  source_operation: 'openapi/fundamental-research-labs-openapi-original.json#GET /api/spreadsheets/skills'
+  source_operation: openapi/fundamental-research-labs-openapi-original.json#GET /api/spreadsheets/skills
 - name: upload_file
   description: Upload a file to use in spreadsheet jobs; returns a file ID.
-  source_operation: 'openapi/fundamental-research-labs-openapi-original.json#POST /api/spreadsheets/upload'
+  source_operation: openapi/fundamental-research-labs-openapi-original.json#POST /api/spreadsheets/upload
 - name: get_job_status
   description: Check the status of a spreadsheet processing job.
-  source_operation: 'openapi/fundamental-research-labs-openapi-original.json#GET /api/spreadsheets/{runId}'
+  source_operation: openapi/fundamental-research-labs-openapi-original.json#GET /api/spreadsheets/{runId}
 - name: cancel_job
   description: Cancel an active spreadsheet processing job.
-  source_operation: 'openapi/fundamental-research-labs-openapi-original.json#POST /api/spreadsheets/{runId}/cancel'
+  source_operation: openapi/fundamental-research-labs-openapi-original.json#POST /api/spreadsheets/{runId}/cancel
 - name: download_result
   description: Download the processed Excel workbook for a completed job.
-  source_operation: 'openapi/fundamental-research-labs-openapi-original.json#GET /api/spreadsheets/{runId}/download'
+  source_operation: openapi/fundamental-research-labs-openapi-original.json#GET /api/spreadsheets/{runId}/download
 - name: download_artifact
   description: Download a specific artifact file produced by a job.
-  source_operation: 'openapi/fundamental-research-labs-openapi-original.json#GET /api/spreadsheets/{runId}/artifacts/{filename}'
+  source_operation: openapi/fundamental-research-labs-openapi-original.json#GET /api/spreadsheets/{runId}/artifacts/{filename}
 - name: export_team_usage
   description: Export team usage metrics as JSON or CSV.
-  source_operation: 'openapi/fundamental-research-labs-openapi-original.json#GET /api/v1/team/usage-export'
+  source_operation: openapi/fundamental-research-labs-openapi-original.json#GET /api/v1/team/usage-export
+deployment:
+  mode: none
+  verified: derived
+  tools: 10
+  checked: '2026-08-12'
+  source: catalog MCP census

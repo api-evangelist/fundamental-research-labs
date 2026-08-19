@@ -1,0 +1,83 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Shortcut Authentication Usage API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Usage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Export team usage metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/team/usage-export",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "query",
+                "description": "Team or organization ID to export. Required for API-key integrations. Usage Metrics shows a prefilled request for the current organization."
+              },
+              {
+                "name": "period",
+                "value": "",
+                "type": "query",
+                "description": "Relative date range to export when start_date and end_date are omitted."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "YYYY-MM-DD. Must be provided together with end_date; takes precedence over period."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "YYYY-MM-DD. Must be provided together with start_date; takes precedence over period."
+              },
+              {
+                "name": "timezone",
+                "value": "",
+                "type": "query",
+                "description": "IANA timezone used to resolve relative periods and day boundaries."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format."
+              },
+              {
+                "name": "report",
+                "value": "",
+                "type": "query",
+                "description": "CSV only. summary exports per-member totals; daily exports member usage by day."
+              },
+              {
+                "name": "group_by",
+                "value": "",
+                "type": "query",
+                "description": "JSON only. Add platform usage breakdowns to the response."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Export team usage metrics as JSON or CSV. Usage Metrics in Shortcut provides a prefilled request with your team_id; use these query parameters to customize the date range, output format, and optional platform grouping. API keys must belong to a user with usage metrics access for the requested team or organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,196 @@
+{
+  "item": [
+    {
+      "id": "b7655a42-c994-4b20-95d1-40c05ecce69c",
+      "name": "Usage",
+      "description": {
+        "content": "Export team usage metrics for reporting, finance, and internal analytics. Usage Metrics in Shortcut provides a prefilled request with your team_id; use this reference to customize date range, format, or grouping.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e065c438-5454-4475-aaa1-12640502d188",
+          "name": "Export team usage metrics",
+          "request": {
+            "name": "Export team usage metrics",
+            "description": {
+              "content": "Export team usage metrics as JSON or CSV. Usage Metrics in Shortcut provides a prefilled request with your team_id; use these query parameters to customize the date range, output format, and optional platform grouping. API keys must belong to a user with usage metrics access for the requested team or organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "team",
+                "usage-export"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "team_id",
+                  "value": "<string>",
+                  "description": "Team or organization ID to export. Required for API-key integrations. Usage Metrics shows a prefilled request for the current organization."
+                },
+                {
+                  "disabled": false,
+                  "key": "period",
+                  "value": "month",
+                  "description": "Relative date range to export when start_date and end_date are omitted."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<string>",
+                  "description": "YYYY-MM-DD. Must be provided together with end_date; takes precedence over period."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<string>",
+                  "description": "YYYY-MM-DD. Must be provided together with start_date; takes precedence over period."
+                },
+                {
+                  "disabled": false,
+                  "key": "timezone",
+                  "value": "UTC",
+                  "description": "IANA timezone used to resolve relative periods and day boundaries."
+                },
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "json",
+                  "description": "Response format."
+                },
+                {
+                  "disabled": false,
+                  "key": "report",
+                  "value": "summary",
+                  "description": "CSV only. summary exports per-member totals; daily exports member usage by day."
+                },
+                {
+                  "disabled": false,
+                  "key": "group_by",
+                  "value": "<string>",
+                  "description": "JSON only. Add platform usage breakdowns to the response."
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "30c27c74-c36b-4577-8bfe-23775a5a14ef",
+              "name": "Default Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "team",
+                    "usage-export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "team_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "period",
+                      "value": "month"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "timezone",
+                      "value": "UTC"
+                    },
+                    {
+                      "key": "format",
+                      "value": "json"
+                    },
+                    {
+                      "key": "report",
+                      "value": "summary"
+                    },
+                    {
+                      "key": "group_by",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "9d6d3f9c-067c-4eb5-bef6-c0a5e742e13d",
+    "name": "Shortcut Authentication Usage API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Shortcut API lets teams automate spreadsheet workflows and export organization usage data programmatically.\n\n## Getting Started\n\n### Create an API key\n\n1. Go to [shortcut.ai](https://shortcut.ai)\n2. Navigate to **Settings → API Keys**\n3. Create a new API key\n\nExternal callers use an API key in the `Authorization` header as a Bearer token:\n`Authorization: Bearer sc-xxx`\n\nAuthenticated Shortcut applications can call spreadsheet automation routes with\nthe user's Shortcut session or access token for run, upload, status, download,\nskills, and cancel operations. Non-browser applications send the JWT as a\nbearer token; Shortcut web applications may use the same JWT through the\n`shortcut_access_token` cookie in a credentialed request from a trusted\nShortcut origin. `/verify` and webhooks require API key authentication because\nthey depend on API key and webhook-secret state.\n\n### Spreadsheet automation workflow\n\n1. **Verify your API key**: `GET /api/spreadsheets/verify`\n2. **Submit a job**: `POST /api/spreadsheets` with a prompt\n3. **Check status**: `GET /api/spreadsheets/:runId` (poll until completed, failed, or error)\n4. **Download result**: `GET /api/spreadsheets/:runId/download`\n\n### Usage export workflow\n\n1. Open **Usage Metrics** in Shortcut.\n2. Copy the prefilled command from **Programmatic export**.\n3. Use the Usage API reference to customize date range, format, or grouping.\n\n### Spreadsheet automation limits\n\n- Maximum 2000 concurrent jobs per API key\n- Job timeout: 30 minutes (configurable up to 120 minutes)\n",
+      "type": "text/plain"
+    }
+  }
+}

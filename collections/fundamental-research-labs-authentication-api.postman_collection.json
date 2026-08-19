@@ -1,0 +1,212 @@
+{
+  "item": [
+    {
+      "id": "68e612c8-6c45-4a75-8732-099d85ab5378",
+      "name": "Authentication",
+      "description": {
+        "content": "API key authentication and verification",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a581858b-660b-45c5-b3da-bb83e888b4e3",
+          "name": "Verify API Key",
+          "request": {
+            "name": "Verify API Key",
+            "description": {
+              "content": "Verifies that your API key is valid and returns information about the authenticated user",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "spreadsheets",
+                "verify"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0b92856d-6efa-44de-b326-0ebc5a42ef67",
+              "name": "Default Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "spreadsheets",
+                    "verify"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"string\",\n  \"webhookSecret\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4ccfc1f4-4335-43f5-9e1a-d921aa505c0a",
+              "name": "Default Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "spreadsheets",
+                    "verify"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e612d554-40b7-4163-8f1d-b74b10ace37c",
+              "name": "Default Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "spreadsheets",
+                    "verify"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "fe4558e4-40f3-4973-b9f8-1ae11ca6e771",
+    "name": "Shortcut Authentication API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Shortcut API lets teams automate spreadsheet workflows and export organization usage data programmatically.\n\n## Getting Started\n\n### Create an API key\n\n1. Go to [shortcut.ai](https://shortcut.ai)\n2. Navigate to **Settings → API Keys**\n3. Create a new API key\n\nExternal callers use an API key in the `Authorization` header as a Bearer token:\n`Authorization: Bearer sc-xxx`\n\nAuthenticated Shortcut applications can call spreadsheet automation routes with\nthe user's Shortcut session or access token for run, upload, status, download,\nskills, and cancel operations. Non-browser applications send the JWT as a\nbearer token; Shortcut web applications may use the same JWT through the\n`shortcut_access_token` cookie in a credentialed request from a trusted\nShortcut origin. `/verify` and webhooks require API key authentication because\nthey depend on API key and webhook-secret state.\n\n### Spreadsheet automation workflow\n\n1. **Verify your API key**: `GET /api/spreadsheets/verify`\n2. **Submit a job**: `POST /api/spreadsheets` with a prompt\n3. **Check status**: `GET /api/spreadsheets/:runId` (poll until completed, failed, or error)\n4. **Download result**: `GET /api/spreadsheets/:runId/download`\n\n### Usage export workflow\n\n1. Open **Usage Metrics** in Shortcut.\n2. Copy the prefilled command from **Programmatic export**.\n3. Use the Usage API reference to customize date range, format, or grouping.\n\n### Spreadsheet automation limits\n\n- Maximum 2000 concurrent jobs per API key\n- Job timeout: 30 minutes (configurable up to 120 minutes)\n",
+      "type": "text/plain"
+    }
+  }
+}

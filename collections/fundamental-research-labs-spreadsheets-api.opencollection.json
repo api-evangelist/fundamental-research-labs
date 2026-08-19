@@ -1,0 +1,192 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Shortcut Authentication Spreadsheets API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Spreadsheets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Spreadsheet Runs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/spreadsheets",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List past spreadsheet processing runs for the authenticated user."
+        },
+        {
+          "info": {
+            "name": "Submit Spreadsheet Processing Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/spreadsheets",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit a natural language prompt to process a spreadsheet. Optionally provide an initial Excel file and context files."
+        },
+        {
+          "info": {
+            "name": "List Skills",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/spreadsheets/skills",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List available skills (built-in/default, personal, and team). The returned `id` is source-qualified and is the only accepted value for `POST /api/spreadsheets` `skills`; older folder-name-only ids are rejected. The web UI labels default skills as Official, but the API id prefix is `default:`."
+        },
+        {
+          "info": {
+            "name": "Upload File",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/spreadsheets/upload",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Upload a file to use in spreadsheet jobs. Returns a file ID."
+        },
+        {
+          "info": {
+            "name": "Cancel Spreadsheet Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/spreadsheets/:runId/cancel",
+            "params": [
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "Unique run identifier"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Cancel an active spreadsheet processing job. Active queued/running runs are marked cancelled and any live execution sandbox is terminated best-effort."
+        },
+        {
+          "info": {
+            "name": "Get Spreadsheet Job Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/spreadsheets/:runId",
+            "params": [
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "Unique run identifier"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Check the status of a spreadsheet processing job. Returns queued, running, finalizing, completed, failed, or cancelled status."
+        },
+        {
+          "info": {
+            "name": "Download Spreadsheet Result",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/spreadsheets/:runId/download",
+            "params": [
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "Unique run identifier"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Download the processed Excel file for a completed workbook-producing job"
+        },
+        {
+          "info": {
+            "name": "Download Artifact",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/spreadsheets/:runId/artifacts/:filename",
+            "params": [
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "Unique run identifier"
+              },
+              {
+                "name": "filename",
+                "value": "",
+                "type": "path",
+                "description": "Artifact filename"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Download a specific artifact file produced by a job."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
