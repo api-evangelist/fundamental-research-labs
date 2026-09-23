@@ -1,73 +1,8 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Shortcut Authentication Spreadsheets API
+  title: Shortcut Spreadsheets API
   version: 1.0.0
-  description: 'Shortcut API lets teams automate spreadsheet workflows and export organization usage data programmatically.
-
-
-    ## Getting Started
-
-
-    ### Create an API key
-
-
-    1. Go to [shortcut.ai](https://shortcut.ai)
-
-    2. Navigate to **Settings → API Keys**
-
-    3. Create a new API key
-
-
-    External callers use an API key in the `Authorization` header as a Bearer token:
-
-    `Authorization: Bearer sc-xxx`
-
-
-    Authenticated Shortcut applications can call spreadsheet automation routes with
-
-    the user''s Shortcut session or access token for run, upload, status, download,
-
-    skills, and cancel operations. Non-browser applications send the JWT as a
-
-    bearer token; Shortcut web applications may use the same JWT through the
-
-    `shortcut_access_token` cookie in a credentialed request from a trusted
-
-    Shortcut origin. `/verify` and webhooks require API key authentication because
-
-    they depend on API key and webhook-secret state.
-
-
-    ### Spreadsheet automation workflow
-
-
-    1. **Verify your API key**: `GET /api/spreadsheets/verify`
-
-    2. **Submit a job**: `POST /api/spreadsheets` with a prompt
-
-    3. **Check status**: `GET /api/spreadsheets/:runId` (poll until completed, failed, or error)
-
-    4. **Download result**: `GET /api/spreadsheets/:runId/download`
-
-
-    ### Usage export workflow
-
-
-    1. Open **Usage Metrics** in Shortcut.
-
-    2. Copy the prefilled command from **Programmatic export**.
-
-    3. Use the Usage API reference to customize date range, format, or grouping.
-
-
-    ### Spreadsheet automation limits
-
-
-    - Maximum 2000 concurrent jobs per API key
-
-    - Job timeout: 30 minutes (configurable up to 120 minutes)
-
-    '
+  description: Shortcut API lets teams automate spreadsheet workflows and export organization usage data programmatically.
 tags:
 - name: Spreadsheets
   description: Spreadsheet processing and automation endpoints
@@ -281,6 +216,8 @@ paths:
                 - error
                 - message
                 additionalProperties: false
+      operationId: postApiSpreadsheets
+      x-operation-id-source: derived
     get:
       summary: List Spreadsheet Runs
       tags:
@@ -377,6 +314,8 @@ paths:
                 - error
                 - message
                 additionalProperties: false
+      operationId: getApiSpreadsheets
+      x-operation-id-source: derived
   /api/spreadsheets/skills:
     get:
       summary: List Skills
@@ -469,6 +408,8 @@ paths:
                 - error
                 - message
                 additionalProperties: false
+      operationId: getApiSpreadsheetsSkills
+      x-operation-id-source: derived
   /api/spreadsheets/upload:
     post:
       summary: Upload File
@@ -592,6 +533,8 @@ paths:
                 - error
                 - message
                 additionalProperties: false
+      operationId: postApiSpreadsheetsUpload
+      x-operation-id-source: derived
   /api/spreadsheets/{runId}/cancel:
     post:
       summary: Cancel Spreadsheet Job
@@ -746,6 +689,8 @@ paths:
                 - error
                 - message
                 additionalProperties: false
+      operationId: postApiSpreadsheetsByRunIdCancel
+      x-operation-id-source: derived
   /api/spreadsheets/{runId}:
     get:
       summary: Get Spreadsheet Job Status
@@ -924,6 +869,8 @@ paths:
                 - error
                 - message
                 additionalProperties: false
+      operationId: getApiSpreadsheetsByRunId
+      x-operation-id-source: derived
   /api/spreadsheets/{runId}/download:
     get:
       summary: Download Spreadsheet Result
@@ -1051,6 +998,8 @@ paths:
                 - error
                 - message
                 additionalProperties: false
+      operationId: getApiSpreadsheetsByRunIdDownload
+      x-operation-id-source: derived
   /api/spreadsheets/{runId}/artifacts/{filename}:
     get:
       summary: Download Artifact
@@ -1155,6 +1104,8 @@ paths:
                 - error
                 - message
                 additionalProperties: false
+      operationId: getApiSpreadsheetsByRunIdArtifactsByFilename
+      x-operation-id-source: derived
 components:
   securitySchemes:
     apiKey:
