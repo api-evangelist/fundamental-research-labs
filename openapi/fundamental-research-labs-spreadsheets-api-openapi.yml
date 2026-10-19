@@ -2,7 +2,81 @@ openapi: 3.2.0
 info:
   title: Shortcut Spreadsheets API
   version: 1.0.0
-  description: Shortcut API lets teams automate spreadsheet workflows and export organization usage data programmatically.
+  description: 'Shortcut API lets teams automate spreadsheet workflows and export organization usage data programmatically.
+
+
+    ## Getting Started
+
+
+    ### Create an API key
+
+
+    1. Go to shortcut.ai
+
+    2. Navigate to **Settings → API Keys**
+
+    3. Create a new API key
+
+
+    External callers use an API key in the `Authorization` header as a Bearer token:
+
+    `Authorization: Bearer sc-xxx`
+
+
+    Authenticated Shortcut applications can call spreadsheet automation routes with
+
+    the user''s Shortcut session or access token for run, upload, status, download,
+
+    skills, and cancel operations. Non-browser applications send the JWT as a
+
+    bearer token; Shortcut web applications may use the same JWT through the
+
+    `shortcut_access_token` cookie in a credentialed request from a trusted
+
+    Shortcut origin. `/verify` and webhooks require API key authentication because
+
+    they depend on API key and webhook-secret state.
+
+
+    Registered integrations can also use authorization-code OAuth with S256 PKCE
+
+    and client authentication. The user approves `api:access`; the integration
+
+    sends its OAuth access token as a Bearer token on spreadsheet routes. This
+
+    preserves the user''s ownership, subscription, and credit checks. OAuth does not
+
+    support API-key verification, webhooks, or organization usage export.
+
+
+    ### Spreadsheet automation workflow
+
+
+    1. **Verify your API key**: `GET /api/spreadsheets/verify`
+
+    2. **Submit a job**: `POST /api/spreadsheets` with a prompt
+
+    3. **Check status**: `GET /api/spreadsheets/:runId` (poll until completed, failed, or error)
+
+    4. **Download result**: `GET /api/spreadsheets/:runId/download`
+
+
+    ### Usage export workflow
+
+
+    1. Open **Usage Metrics** in Shortcut.
+
+    2. Copy the prefilled command from **Programmatic export**.
+
+    3. Use the Usage API reference to customize date range, format, or grouping.
+
+
+    ### Spreadsheet automation limits
+
+
+    - Maximum 2000 concurrent jobs per API key
+
+    - Job timeout: 30 minutes (configurable up to 120 minutes)'
 tags:
 - name: Spreadsheets
   description: Spreadsheet processing and automation endpoints
@@ -27,13 +101,65 @@ paths:
                   type: string
                   format: uuid
                   description: Optional File ID for initial Excel file
+                workbook:
+                  type: object
+                  properties:
+                    workspacePath:
+                      type: string
+                      description: Path of an .xlsx/.xlsm workbook in your global workspace, relative to the workspace root (for example "models/Acme DCF.xlsx").
+                  required:
+                  - workspacePath
+                  additionalProperties: false
+                  description: Read the input workbook from your workspace instead of uploading it. Mutually exclusive with initFile. The run reads the file as of dispatch and records its storage generation as the baseline for `apply`.
+                apply:
+                  type: string
+                  enum:
+                  - review
+                  - auto
+                  - none
+                  description: What to do with the result of a `workbook` run. "none" (default) only makes the result downloadable. "review" stores the baseline, result and a manifest in the review folder so the changes can be reviewed and merged. "auto" overwrites the workspace workbook if it is unchanged since the baseline; otherwise it falls back to "review" and reports a warning in `apply.warnings`.
+                reviewPath:
+                  type: string
+                  description: Workspace-relative folder for review artifacts (baseline.xlsx, result.xlsx, review.json). Defaults to "platform-api/runs/<runId>". Only meaningful with apply "review" or "auto".
+                automationRunId:
+                  type: string
+                  format: uuid
+                  description: Attribute this run to an automation run, so history and credits roll up to it.
+                sourceWorkspace:
+                  anyOf:
+                  - type: object
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - global
+                      id:
+                        type: string
+                        enum:
+                        - global
+                    required:
+                    - type
+                    additionalProperties: false
+                  - type: object
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - file
+                      id:
+                        type: string
+                        format: uuid
+                    required:
+                    - type
+                    - id
+                    additionalProperties: false
                 contextFiles:
                   type: array
                   items:
                     type: string
                     format: uuid
-                  maxItems: 5
-                  description: Optional File IDs for additional context files
+                  maxItems: 20
+                  description: 'Optional context file IDs: at most one .xls/.xlsx context workbook, in addition to an optional initial workbook. All attachment filenames must be unique, ignoring case.'
                 timeoutSeconds:
                   type: integer
                   exclusiveMinimum: 0
@@ -53,7 +179,14 @@ paths:
                 model:
                   type: string
                   minLength: 1
-                  description: Optional ShortcutXL model id or model pattern for this job
+                  description: Optional ShortcutXL model id or model pattern for this job. Use `GET /api/spreadsheets/models` for the standard catalog and actual submission default.
+                speed:
+                  type: string
+                  enum:
+                  - standard
+                  - fast
+                  - ultrafast
+                  description: Response speed; Fast and Ultrafast require an exact supported Shortcut model ID and Fast mode access. Ultrafast requires GPT-6 Astra and uses more credits
                 thinking:
                   type: string
                   enum:
@@ -63,7 +196,17 @@ paths:
                   - medium
                   - high
                   - xhigh
+                  - max
                   description: Optional ShortcutXL thinking/effort level for this job
+                runtimeModelOverlay:
+                  type: object
+                  additionalProperties: {}
+                  description: Versioned ShortcutXL runtime model overlay, carried opaquely to the runtime
+                preferCurrentModelForSubagents:
+                  type: boolean
+                subagentModel:
+                  type: string
+                  minLength: 1
                 projectId:
                   type: string
                   format: uuid
@@ -75,6 +218,9 @@ paths:
                     minLength: 1
                   maxItems: 10
                   description: Optional source-qualified skill IDs to apply to this job. Use `GET /api/spreadsheets/skills` and submit returned `id` values such as `default:commit`, `personal:my-skill`, or `team:{teamId}:team-skill`. Submit-time validation checks id shape and team authorization, but does not perform a GCS existence check. Passing one skill is recommended — combining multiple skills may produce unpredictable results.
+                retainConversation:
+                  type: boolean
+                  description: 'Optional. Save this run''s agent conversation as one of your Shortcut conversations so it can be reopened from chat history. When the run completes, its status includes `conversation`: an `available` locator or `unavailable`. Omitted runs keep the default unsaved session.'
                 debug:
                   anyOf:
                   - type: boolean
@@ -95,6 +241,7 @@ paths:
       - apiKey: []
       - shortcutSession: []
       - shortcutCookie: []
+      - shortcutOAuth: []
       responses:
         '200':
           description: Default Response
@@ -111,7 +258,23 @@ paths:
                     enum:
                     - queued
                     - running
-                    description: Initial job status
+                    - finalizing
+                    - completed
+                    - failed
+                    - cancelled
+                    description: 'Job status: "queued" or "running" for a new run; the current status when an Idempotency-Key replays an existing run'
+                  automationRunId:
+                    type: string
+                    format: uuid
+                    description: The automation run this run is attributed to, when one was supplied
+                  idempotentReplay:
+                    type: boolean
+                    description: 'Present when the Idempotency-Key matched an existing run: no new run was created and nothing was charged. The response also carries an Idempotent-Replayed: true header.'
+                    enum:
+                    - true
+                  idempotencyWarning:
+                    type: string
+                    description: Present on a replay when the request body differs from the one that created the run. The original run is still returned.
                 required:
                 - runId
                 - status
@@ -123,6 +286,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  code:
+                    type: string
                   success:
                     type: boolean
                     enum:
@@ -163,6 +328,31 @@ paths:
               schema:
                 type: object
                 properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  code:
+                    type: string
+                    description: AUTOMATION_BUDGET_CALLS or AUTOMATION_BUDGET_CREDITS when an automation run token reached its run or daily budget
+                required:
+                - success
+                - error
+                - message
+                additionalProperties: false
+        '413':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
                   success:
                     type: boolean
                     enum:
@@ -243,6 +433,7 @@ paths:
       - apiKey: []
       - shortcutSession: []
       - shortcutCookie: []
+      - shortcutOAuth: []
       responses:
         '200':
           description: Default Response
@@ -272,7 +463,46 @@ paths:
                           type:
                           - 'null'
                           - number
+                        usage:
+                          type: object
+                          properties:
+                            status:
+                              type: string
+                              enum:
+                              - pending
+                              - provisional
+                              - unavailable
+                              description: Provisional when credits have been recorded; otherwise pending for active runs or unavailable for terminal runs. Execution completion never establishes usage completeness.
+                            recordedCredits:
+                              anyOf:
+                              - type: integer
+                                minimum: -2147483648
+                                maximum: 2147483647
+                              - type: 'null'
+                              description: The stored platform run credit snapshot, including a recorded zero. Not net of refunds.
+                            asOf:
+                              type: string
+                              format: date-time
+                              description: UTC response observation time for the stored row, not an event watermark, last usage update or completeness guarantee.
+                            coverage:
+                              type: string
+                              enum:
+                              - stored_run_snapshot
+                            revision:
+                              type: 'null'
+                              description: No canonical usage reconciliation revision is available yet.
+                          required:
+                          - status
+                          - recordedCredits
+                          - asOf
+                          - coverage
+                          - revision
+                          additionalProperties: false
                         summary:
+                          type:
+                          - 'null'
+                          - string
+                        automationRunId:
                           type:
                           - 'null'
                           - string
@@ -283,7 +513,9 @@ paths:
                       - createdAt
                       - completedAt
                       - creditsUsed
+                      - usage
                       - summary
+                      - automationRunId
                       additionalProperties: false
                   limit:
                     type: number
@@ -316,6 +548,133 @@ paths:
                 additionalProperties: false
       operationId: getApiSpreadsheets
       x-operation-id-source: derived
+  /api/spreadsheets/models:
+    get:
+      summary: List Models
+      tags:
+      - Spreadsheets
+      description: 'List the curated standard, ungated model catalog and the actual spreadsheet submission default. This is not every accepted runtime model: administrator-added, gated, experimental, and custom models are excluded for all callers. Product picker preferences (including APAC and organization defaults) do not change this Platform API catalog or submission default. Pass a returned `id` as `model` in `POST /api/spreadsheets`. Supported thinking levels are not included; the submit schema documents accepted thinking values.'
+      security:
+      - apiKey: []
+      - shortcutSession: []
+      - shortcutCookie: []
+      - shortcutOAuth: []
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  models:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Model reference — pass this exact value as `model` when submitting a job to `POST /api/spreadsheets`.
+                        name:
+                          type: string
+                          description: Human-readable model name
+                        description:
+                          type: string
+                          description: What the model is best suited for
+                        default:
+                          type: boolean
+                          description: Whether jobs use this model when `model` is omitted
+                      required:
+                      - id
+                      - name
+                      - description
+                      - default
+                      additionalProperties: false
+                required:
+                - models
+                additionalProperties: false
+        '401':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - success
+                - error
+                - message
+                additionalProperties: false
+        '423':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - success
+                - error
+                - message
+                additionalProperties: false
+        '500':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - success
+                - error
+                - message
+                additionalProperties: false
+        '503':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - success
+                - error
+                - message
+                additionalProperties: false
+      operationId: getApiSpreadsheetsModels
+      x-operation-id-source: derived
   /api/spreadsheets/skills:
     get:
       summary: List Skills
@@ -326,6 +685,7 @@ paths:
       - apiKey: []
       - shortcutSession: []
       - shortcutCookie: []
+      - shortcutOAuth: []
       responses:
         '200':
           description: Default Response
@@ -410,6 +770,403 @@ paths:
                 additionalProperties: false
       operationId: getApiSpreadsheetsSkills
       x-operation-id-source: derived
+  /api/spreadsheets/skills/import:
+    post:
+      summary: Import a portable skill
+      tags:
+      - Spreadsheets
+      description: 'Create a new personal skill from a shortcut-skill-v1 bundle. Never overwrites: duplicate names receive fresh personal:imported-{uuid} IDs. Only name, description, license and compatibility string frontmatter is supported. Maximum 100 files, 1 MiB per file, 5 MiB decoded total and 8 MiB request body. Requires root UTF-8 SKILL.md. No archive extraction, symlinks, hidden paths, team writes or official writes. External tools, credentials and platform dependencies are not installed.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                format:
+                  type: string
+                  enum:
+                  - shortcut-skill-v1
+                files:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      path:
+                        type: string
+                        minLength: 1
+                        maxLength: 240
+                      data:
+                        type: string
+                        maxLength: 1398104
+                        description: Canonical padded base64 file bytes
+                    required:
+                    - path
+                    - data
+                    additionalProperties: false
+                  minItems: 1
+                  maxItems: 100
+              required:
+              - format
+              - files
+              additionalProperties: false
+      security:
+      - apiKey: []
+      - shortcutSession: []
+      - shortcutCookie: []
+      - shortcutOAuth: []
+      responses:
+        '201':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  folderName:
+                    type: string
+                  name:
+                    type: string
+                required:
+                - id
+                - folderName
+                - name
+                additionalProperties: false
+        '400':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+        '401':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+        '403':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+        '404':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+        '409':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+        '413':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+        '503':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+      operationId: postApiSpreadsheetsSkillsImport
+      x-operation-id-source: derived
+  /api/spreadsheets/skills/{skillId}/export:
+    get:
+      summary: Export a portable skill
+      tags:
+      - Spreadsheets
+      description: Export your personal skill or a directly authorized team skill with full content visibility. Official and summary-only skills return 403. Returns {bundle, warnings}; import the bundle object or decode its base64 files into a directory. Only supported portable frontmatter survives; warnings describe removed metadata and declared platform dependencies. Storage provenance, ownership and history are excluded. Same decoded limits as import. No guarantee of execution compatibility with other agents.
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: skillId
+        required: true
+      security:
+      - apiKey: []
+      - shortcutSession: []
+      - shortcutCookie: []
+      - shortcutOAuth: []
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bundle:
+                    type: object
+                    properties:
+                      format:
+                        type: string
+                        enum:
+                        - shortcut-skill-v1
+                      files:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            path:
+                              type: string
+                              minLength: 1
+                              maxLength: 240
+                            data:
+                              type: string
+                              maxLength: 1398104
+                              description: Canonical padded base64 file bytes
+                          required:
+                          - path
+                          - data
+                          additionalProperties: false
+                        minItems: 1
+                        maxItems: 100
+                    required:
+                    - format
+                    - files
+                    additionalProperties: false
+                  warnings:
+                    type: array
+                    items:
+                      type: string
+                required:
+                - bundle
+                - warnings
+                additionalProperties: false
+        '400':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+        '401':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+        '403':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+        '404':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+        '409':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+        '413':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+        '503':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                    - false
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                - error
+                - message
+                additionalProperties: false
+      operationId: getApiSpreadsheetsSkillsBySkillIdExport
+      x-operation-id-source: derived
   /api/spreadsheets/upload:
     post:
       summary: Upload File
@@ -420,6 +1177,7 @@ paths:
       - apiKey: []
       - shortcutSession: []
       - shortcutCookie: []
+      - shortcutOAuth: []
       responses:
         '200':
           description: Default Response
@@ -552,6 +1310,7 @@ paths:
       - apiKey: []
       - shortcutSession: []
       - shortcutCookie: []
+      - shortcutOAuth: []
       responses:
         '200':
           description: Default Response
@@ -708,6 +1467,7 @@ paths:
       - apiKey: []
       - shortcutSession: []
       - shortcutCookie: []
+      - shortcutOAuth: []
       responses:
         '200':
           description: Default Response
@@ -720,6 +1480,102 @@ paths:
                     runId:
                       type: string
                       description: Unique run identifier
+                    usage:
+                      type: object
+                      properties:
+                        status:
+                          type: string
+                          enum:
+                          - pending
+                          - provisional
+                          - unavailable
+                          description: Provisional when credits have been recorded; otherwise pending for active runs or unavailable for terminal runs. Execution completion never establishes usage completeness.
+                        recordedCredits:
+                          anyOf:
+                          - type: integer
+                            minimum: -2147483648
+                            maximum: 2147483647
+                          - type: 'null'
+                          description: The stored platform run credit snapshot, including a recorded zero. Not net of refunds.
+                        asOf:
+                          type: string
+                          format: date-time
+                          description: UTC response observation time for the stored row, not an event watermark, last usage update or completeness guarantee.
+                        coverage:
+                          type: string
+                          enum:
+                          - stored_run_snapshot
+                        revision:
+                          type: 'null'
+                          description: No canonical usage reconciliation revision is available yet.
+                      required:
+                      - status
+                      - recordedCredits
+                      - asOf
+                      - coverage
+                      - revision
+                      additionalProperties: false
+                    automationRunId:
+                      type: string
+                      description: The automation run this run is attributed to, when one was supplied
+                    apply:
+                      type: object
+                      properties:
+                        mode:
+                          type: string
+                          enum:
+                          - review
+                          - auto
+                        outcome:
+                          type: string
+                          enum:
+                          - applied
+                          - review
+                          - review_fallback
+                          - skipped
+                          - error
+                        workspacePath:
+                          type: string
+                        baselineGeneration:
+                          type: string
+                        review:
+                          type: object
+                          properties:
+                            path:
+                              type: string
+                            baselinePath:
+                              type: string
+                            resultPath:
+                              type: string
+                            manifestPath:
+                              type: string
+                          required:
+                          - path
+                          - baselinePath
+                          - resultPath
+                          - manifestPath
+                          additionalProperties: false
+                        warnings:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              code:
+                                type: string
+                              message:
+                                type: string
+                            required:
+                            - code
+                            - message
+                            additionalProperties: false
+                      required:
+                      - mode
+                      - outcome
+                      - workspacePath
+                      - baselineGeneration
+                      - warnings
+                      additionalProperties: false
+                      description: What happened to the result of a workbook run submitted with apply "review" or "auto". Present once the run completes.
                     status:
                       type: string
                       description: Job completed successfully
@@ -728,6 +1584,121 @@ paths:
                     downloadUrl:
                       type: string
                       description: URL to download the result workbook, present when the completed job produced a workbook. Ask-mode jobs may complete with only a summary.
+                    artifactValidation:
+                      type: object
+                      properties:
+                        schemaVersion:
+                          type: number
+                          enum:
+                          - 1
+                        status:
+                          type: string
+                          enum:
+                          - passed
+                          - failed
+                          - unsupported
+                          - unavailable
+                          description: Workbook readability, separate from run status. `passed` is reserved for future maintained-reader evidence and is never emitted by the current partial validator; it is not a financial-correctness claim.
+                        validator:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            version:
+                              type: string
+                          required:
+                          - name
+                          - version
+                          additionalProperties: false
+                        artifact:
+                          type: object
+                          properties:
+                            path:
+                              type: string
+                            format:
+                              type: string
+                              description: xlsx, xlsm, xltx, xltm, xlsb, xls, or unknown
+                            sizeBytes:
+                              type: integer
+                              minimum: 0
+                            sha256:
+                              type: string
+                              pattern: ^[0-9a-f]{64}$
+                              description: Absent when the exact bytes could not be read; never a placeholder digest.
+                          required:
+                          - path
+                          - format
+                          - sizeBytes
+                          additionalProperties: false
+                        checks:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                              status:
+                                type: string
+                                enum:
+                                - passed
+                                - failed
+                                - not_evaluated
+                                - unsupported
+                                - unavailable
+                              detail:
+                                type: string
+                            required:
+                            - name
+                            - status
+                            additionalProperties: false
+                          maxItems: 64
+                        nativePartial:
+                          type: object
+                          properties:
+                            classification:
+                              type: string
+                              enum:
+                              - registered_native_partial
+                            taskId:
+                              type: string
+                              pattern: ^[0-9a-f]{32}$
+                            workbookId:
+                              type: string
+                              pattern: ^[0-9a-f]{32}$
+                            requestId:
+                              type: string
+                              pattern: ^[0-9a-f]{32}$
+                            declaredOutput:
+                              type: string
+                              enum:
+                              - outputs/result.xlsx
+                            sha256:
+                              type: string
+                              pattern: ^[0-9a-f]{64}$
+                            sizeBytes:
+                              type: integer
+                              exclusiveMinimum: 0
+                              maximum: 104857600
+                          required:
+                          - classification
+                          - taskId
+                          - workbookId
+                          - requestId
+                          - declaredOutput
+                          - sha256
+                          - sizeBytes
+                          additionalProperties: false
+                        durationMs:
+                          type: integer
+                          minimum: 0
+                      required:
+                      - schemaVersion
+                      - status
+                      - validator
+                      - artifact
+                      - checks
+                      additionalProperties: false
+                      description: 'Structural readability of the result workbook, separate from `status`: `status: completed` means execution finished, `artifactValidation.status` says whether the published bytes (`artifact.sha256`) are a readable workbook. Financial quality is never evaluated here. Absent for ask-mode jobs and runs finalized before validation existed.'
                     summary:
                       type: string
                       description: Final AI message summary from the agent
@@ -736,8 +1707,41 @@ paths:
                       items:
                         type: string
                       description: Filenames of files produced by the job. Download via GET /api/spreadsheets/:runId/artifacts/:filename
+                    conversation:
+                      anyOf:
+                      - type: object
+                        properties:
+                          status:
+                            type: string
+                            enum:
+                            - available
+                          fileId:
+                            type: string
+                          threadId:
+                            type: string
+                          runtimeType:
+                            type: string
+                            enum:
+                            - shortcutxl
+                        required:
+                        - status
+                        - fileId
+                        - threadId
+                        - runtimeType
+                        additionalProperties: false
+                      - type: object
+                        properties:
+                          status:
+                            type: string
+                            enum:
+                            - unavailable
+                        required:
+                        - status
+                        additionalProperties: false
+                      description: Present for completed or failed jobs submitted with retainConversation. `available` identifies a saved Shortcut conversation after current owner, organisation and storage checks; `unavailable` means no saved conversation can currently be resolved. This does not change the job outcome or workbook validation.
                   required:
                   - runId
+                  - usage
                   - status
                   - artifacts
                   additionalProperties: false
@@ -746,6 +1750,44 @@ paths:
                     runId:
                       type: string
                       description: Unique run identifier
+                    usage:
+                      type: object
+                      properties:
+                        status:
+                          type: string
+                          enum:
+                          - pending
+                          - provisional
+                          - unavailable
+                          description: Provisional when credits have been recorded; otherwise pending for active runs or unavailable for terminal runs. Execution completion never establishes usage completeness.
+                        recordedCredits:
+                          anyOf:
+                          - type: integer
+                            minimum: -2147483648
+                            maximum: 2147483647
+                          - type: 'null'
+                          description: The stored platform run credit snapshot, including a recorded zero. Not net of refunds.
+                        asOf:
+                          type: string
+                          format: date-time
+                          description: UTC response observation time for the stored row, not an event watermark, last usage update or completeness guarantee.
+                        coverage:
+                          type: string
+                          enum:
+                          - stored_run_snapshot
+                        revision:
+                          type: 'null'
+                          description: No canonical usage reconciliation revision is available yet.
+                      required:
+                      - status
+                      - recordedCredits
+                      - asOf
+                      - coverage
+                      - revision
+                      additionalProperties: false
+                    automationRunId:
+                      type: string
+                      description: The automation run this run is attributed to, when one was supplied
                     status:
                       type: string
                       enum:
@@ -760,13 +1802,56 @@ paths:
                       description: Filenames of currently available run artifacts, including live debug snapshots when debug mode is enabled.
                   required:
                   - runId
+                  - usage
                   - status
                   additionalProperties: false
                 - type: object
                   properties:
+                    partial:
+                      type: string
+                      enum:
+                      - native_candidate
                     runId:
                       type: string
                       description: Unique run identifier
+                    usage:
+                      type: object
+                      properties:
+                        status:
+                          type: string
+                          enum:
+                          - pending
+                          - provisional
+                          - unavailable
+                          description: Provisional when credits have been recorded; otherwise pending for active runs or unavailable for terminal runs. Execution completion never establishes usage completeness.
+                        recordedCredits:
+                          anyOf:
+                          - type: integer
+                            minimum: -2147483648
+                            maximum: 2147483647
+                          - type: 'null'
+                          description: The stored platform run credit snapshot, including a recorded zero. Not net of refunds.
+                        asOf:
+                          type: string
+                          format: date-time
+                          description: UTC response observation time for the stored row, not an event watermark, last usage update or completeness guarantee.
+                        coverage:
+                          type: string
+                          enum:
+                          - stored_run_snapshot
+                        revision:
+                          type: 'null'
+                          description: No canonical usage reconciliation revision is available yet.
+                      required:
+                      - status
+                      - recordedCredits
+                      - asOf
+                      - coverage
+                      - revision
+                      additionalProperties: false
+                    automationRunId:
+                      type: string
+                      description: The automation run this run is attributed to, when one was supplied
                     status:
                       type: string
                       enum:
@@ -776,9 +1861,244 @@ paths:
                     error:
                       type: string
                       description: Error message
+                    failure:
+                      anyOf:
+                      - type: object
+                        properties:
+                          schemaVersion:
+                            type: number
+                            enum:
+                            - 1
+                          status:
+                            type: string
+                            enum:
+                            - reported
+                          phase:
+                            type: string
+                            enum:
+                            - output_finalization
+                          code:
+                            type: string
+                            enum:
+                            - output_missing
+                            - output_path_invalid
+                            - output_stat_failed
+                            - no_sheet_pool
+                            - no_active_workbook
+                            - no_modified_workbook
+                            - ambiguous_modified_workbooks
+                            - workbook_selection_failed
+                            - snapshot_failed
+                            - snapshot_output_invalid
+                          source:
+                            type: string
+                            enum:
+                            - cli_reported
+                          message:
+                            type: string
+                          attempt:
+                            type: 'null'
+                          retryability:
+                            type: string
+                            enum:
+                            - unknown
+                        required:
+                        - schemaVersion
+                        - status
+                        - phase
+                        - code
+                        - source
+                        - message
+                        - attempt
+                        - retryability
+                        additionalProperties: false
+                      - type: object
+                        properties:
+                          schemaVersion:
+                            type: number
+                            enum:
+                            - 1
+                          status:
+                            type: string
+                            enum:
+                            - unavailable
+                          phase:
+                            type: 'null'
+                          code:
+                            type: 'null'
+                          source:
+                            type: 'null'
+                          message:
+                            type: string
+                            enum:
+                            - CLI finalization details are unavailable.
+                          attempt:
+                            type: 'null'
+                          retryability:
+                            type: string
+                            enum:
+                            - unknown
+                        required:
+                        - schemaVersion
+                        - status
+                        - phase
+                        - code
+                        - source
+                        - message
+                        - attempt
+                        - retryability
+                        additionalProperties: false
+                      description: Bounded CLI-reported failure evidence. Not independently verified root cause or retry authority.
                     downloadUrl:
                       type: string
-                      description: URL to download a partial result workbook when a timeout saved one.
+                      description: URL to recover a retained workbook after a timeout or validation failure. Recovery does not imply that the workbook is readable; failed validation remains failed.
+                    artifactValidation:
+                      type: object
+                      properties:
+                        schemaVersion:
+                          type: number
+                          enum:
+                          - 1
+                        status:
+                          type: string
+                          enum:
+                          - passed
+                          - failed
+                          - unsupported
+                          - unavailable
+                          description: Workbook readability, separate from run status. `passed` is reserved for future maintained-reader evidence and is never emitted by the current partial validator; it is not a financial-correctness claim.
+                        validator:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            version:
+                              type: string
+                          required:
+                          - name
+                          - version
+                          additionalProperties: false
+                        artifact:
+                          type: object
+                          properties:
+                            path:
+                              type: string
+                            format:
+                              type: string
+                              description: xlsx, xlsm, xltx, xltm, xlsb, xls, or unknown
+                            sizeBytes:
+                              type: integer
+                              minimum: 0
+                            sha256:
+                              type: string
+                              pattern: ^[0-9a-f]{64}$
+                              description: Absent when the exact bytes could not be read; never a placeholder digest.
+                          required:
+                          - path
+                          - format
+                          - sizeBytes
+                          additionalProperties: false
+                        checks:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                              status:
+                                type: string
+                                enum:
+                                - passed
+                                - failed
+                                - not_evaluated
+                                - unsupported
+                                - unavailable
+                              detail:
+                                type: string
+                            required:
+                            - name
+                            - status
+                            additionalProperties: false
+                          maxItems: 64
+                        nativePartial:
+                          type: object
+                          properties:
+                            classification:
+                              type: string
+                              enum:
+                              - registered_native_partial
+                            taskId:
+                              type: string
+                              pattern: ^[0-9a-f]{32}$
+                            workbookId:
+                              type: string
+                              pattern: ^[0-9a-f]{32}$
+                            requestId:
+                              type: string
+                              pattern: ^[0-9a-f]{32}$
+                            declaredOutput:
+                              type: string
+                              enum:
+                              - outputs/result.xlsx
+                            sha256:
+                              type: string
+                              pattern: ^[0-9a-f]{64}$
+                            sizeBytes:
+                              type: integer
+                              exclusiveMinimum: 0
+                              maximum: 104857600
+                          required:
+                          - classification
+                          - taskId
+                          - workbookId
+                          - requestId
+                          - declaredOutput
+                          - sha256
+                          - sizeBytes
+                          additionalProperties: false
+                        durationMs:
+                          type: integer
+                          minimum: 0
+                      required:
+                      - schemaVersion
+                      - status
+                      - validator
+                      - artifact
+                      - checks
+                      additionalProperties: false
+                      description: Present when the job failed because its published result workbook failed validation.
+                    conversation:
+                      anyOf:
+                      - type: object
+                        properties:
+                          status:
+                            type: string
+                            enum:
+                            - available
+                          fileId:
+                            type: string
+                          threadId:
+                            type: string
+                          runtimeType:
+                            type: string
+                            enum:
+                            - shortcutxl
+                        required:
+                        - status
+                        - fileId
+                        - threadId
+                        - runtimeType
+                        additionalProperties: false
+                      - type: object
+                        properties:
+                          status:
+                            type: string
+                            enum:
+                            - unavailable
+                        required:
+                        - status
+                        additionalProperties: false
+                      description: Present for completed or failed jobs submitted with retainConversation. `available` identifies a saved Shortcut conversation after current owner, organisation and storage checks; `unavailable` means no saved conversation can currently be resolved. This does not change the job outcome or workbook validation.
                     artifacts:
                       type: array
                       items:
@@ -786,6 +2106,7 @@ paths:
                       description: Filenames of currently available run artifacts, including failure debug artifacts when debug mode is enabled.
                   required:
                   - runId
+                  - usage
                   - status
                   - error
                   additionalProperties: false
@@ -876,7 +2197,7 @@ paths:
       summary: Download Spreadsheet Result
       tags:
       - Spreadsheets
-      description: Download the processed Excel file for a completed workbook-producing job
+      description: Download a completed result or a retained workbook from a timeout or validation failure
       parameters:
       - schema:
           type: string
@@ -888,13 +2209,14 @@ paths:
       - apiKey: []
       - shortcutSession: []
       - shortcutCookie: []
+      - shortcutOAuth: []
       responses:
         '200':
-          description: Binary Excel file
+          description: Binary Excel file. `X-Shortcut-Artifact-Sha256` is the SHA-256 of the served bytes and `X-Shortcut-Artifact-Validation` the structural validation status (`not_evaluated` when none was recorded, e.g. timeout partial results). Retained failed-validation results use `failed`; recovery does not imply readability. Any result whose stored bytes no longer match the validated digest returns 409.
           content:
             application/json:
               schema:
-                description: Binary Excel file
+                description: Binary Excel file. `X-Shortcut-Artifact-Sha256` is the SHA-256 of the served bytes and `X-Shortcut-Artifact-Validation` the structural validation status (`not_evaluated` when none was recorded, e.g. timeout partial results). Retained failed-validation results use `failed`; recovery does not imply readability. Any result whose stored bytes no longer match the validated digest returns 409.
                 type: string
                 format: binary
                 contentMediaType: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
@@ -1023,6 +2345,7 @@ paths:
       - apiKey: []
       - shortcutSession: []
       - shortcutCookie: []
+      - shortcutOAuth: []
       responses:
         '401':
           description: Default Response
@@ -1113,6 +2436,11 @@ components:
       scheme: bearer
       bearerFormat: API Key
       description: 'API key in Bearer token format: `Authorization: Bearer sc-xxx`'
+    shortcutOAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: OAuth access token
+      description: Delegated OAuth access token with api:access scope. Existing user permissions and billing apply.
     shortcutSession:
       type: http
       scheme: bearer

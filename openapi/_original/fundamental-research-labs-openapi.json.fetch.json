@@ -1,0 +1,12 @@
+{
+ "url": "https://api.shortcut.ai/api/openapi.json",
+ "final": "https://api.shortcut.ai/api/openapi.json",
+ "status": 200,
+ "content_type": "application/json; charset=utf-8",
+ "bytes": 54198,
+ "sha256": "049efb323ff4d1c0aab42175e8568acd24f8b8b86039882ecfb3ca0c3e40c94a",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}
