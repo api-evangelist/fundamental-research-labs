@@ -178,3 +178,9 @@ components:
       in: cookie
       name: shortcut_access_token
       description: Shortcut web session cookie for credentialed fetch requests. Missing or untrusted Origin headers are rejected.
+x-provenance:
+  method: harvested
+  publisher: Fundamental Research Labs
+  source: https://api.shortcut.ai/api/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
